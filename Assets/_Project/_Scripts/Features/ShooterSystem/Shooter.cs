@@ -232,8 +232,11 @@ public class Shooter : MonoBehaviour
         PixelCell target = PixelGrid.Instance.GetFrontCell(edge, lineIndex);
         if (target == null) return;
 
-        bool hit = PixelGrid.Instance.HandleHit(target, ColorIndex);
-        if (hit) RegisterHit();
+        if (target.ColorIndex==ColorIndex)
+        {
+            RegisterHit();
+            BulletPool.Instance.Fire(transform.position, target,ColorIndex,10);
+        }
     }
 
     private void RegisterHit()
@@ -283,9 +286,9 @@ public class Shooter : MonoBehaviour
                         0.1f,
                         Ease.Linear,cycleMode:CycleMode.Incremental,cycles:8)
            .Group(
-                Tween.Position(transform,transform.position+Vector3.forward, .5f)))
+                Tween.Position(transform,transform.position+Vector3.forward, .5f,ease:Ease.InBack)))
             .Group(
-                Tween.Scale(transform,Vector3.zero,.5f).OnComplete(() =>
+                Tween.Scale(transform,Vector3.zero,.5f,ease:Ease.InBack).OnComplete(() =>
                 {
                     OnRequestRelease?.Invoke(this);
                 })

@@ -90,10 +90,10 @@ public class LevelManager : MonoBehaviour
     private Vector3 GetWaitingPosition(int index)
     {
         if (waitingAreaRoot == null)
-            return new Vector3(index * waitingSpacing, 0f, -8f);
+            return new Vector3(index * waitingSpacing, 1f, -8f);
 
         return waitingAreaRoot.position +
-               waitingAreaRoot.right * (index * waitingSpacing);
+               waitingAreaRoot.right * (index * waitingSpacing)+Vector3.up;
     }
 
     // ═════════════════════════════════════════════════════════════════

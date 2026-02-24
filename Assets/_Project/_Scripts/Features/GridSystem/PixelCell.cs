@@ -9,6 +9,7 @@ public class PixelCell : MonoBehaviour
     public int ColorIndex { get; private set; }
     public bool IsEmpty => ColorIndex < 0;
     public bool IsAlive { get; private set; }
+    public bool IsShooted { get; private set; }
     [SerializeField]private MeshRenderer _meshRenderer;
 
     // ── Private ───────────────────────────────────────────────────────
@@ -60,6 +61,7 @@ public class PixelCell : MonoBehaviour
 
     public void ResetCell()
     {
+        IsShooted = false;
         IsAlive = true;
         transform.localScale = Vector3.one;
         ApplyColor(_baseColor);
@@ -89,5 +91,10 @@ public class PixelCell : MonoBehaviour
             .Chain(Tween.Scale(transform, popScale, 0.06f, ease: Ease.OutCubic))
             .Chain(Tween.Scale(transform, Vector3.zero, 0.18f, ease: Ease.InBack))
             .OnComplete(() => gameObject.SetActive(false));
+    }
+
+    public void SetShooted()
+    {
+        IsShooted = true;
     }
 }

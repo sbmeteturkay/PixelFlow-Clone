@@ -1,7 +1,5 @@
 using UnityEngine;
 using UnityEngine.Pool;
-using System.Collections.Generic;
-using PrimeTween;
 
 public class ShooterPool : MonoBehaviour
 {
