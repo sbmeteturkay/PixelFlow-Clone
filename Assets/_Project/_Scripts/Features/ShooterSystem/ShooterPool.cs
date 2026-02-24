@@ -71,10 +71,7 @@ public class ShooterPool : MonoBehaviour
 
     private void OnReleaseShooter(Shooter shooter)
     {
-        Tween.Scale(shooter.transform,Vector3.zero,.5f).OnComplete(() =>
-        {
-            shooter.gameObject.SetActive(false);
-        });
+        shooter.gameObject.SetActive(false);
     }
 
     private void OnDestroyShooter(Shooter shooter)

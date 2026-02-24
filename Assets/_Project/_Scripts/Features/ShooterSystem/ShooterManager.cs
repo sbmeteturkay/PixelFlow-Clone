@@ -68,9 +68,9 @@ public class ShooterManager : MonoBehaviour
     /// Called by a Shooter when it finishes the spline and wants to enter a slot.
     /// Returns the slot position if available, triggers lose if slot is full.
     /// </summary>
-    public bool TryEnterSlot(Shooter shooter, out Vector3 slotPosition)
+    public bool TryEnterSlot(Shooter shooter, out Transform slotTransform)
     {
-        slotPosition = Vector3.zero;
+        slotTransform = transform;
 
         if (IsSlotFull)
         {
@@ -79,7 +79,7 @@ public class ShooterManager : MonoBehaviour
         }
 
         _shootersInSlot.Add(shooter);
-        slotPosition = GetNextSlotPosition();
+        slotTransform = GetNextSlotTransform();
         return true;
     }
 
@@ -88,14 +88,14 @@ public class ShooterManager : MonoBehaviour
         _shootersInSlot.Remove(shooter);
     }
 
-    private Vector3 GetNextSlotPosition()
+    private Transform GetNextSlotTransform()
     {
         int index = _shootersInSlot.Count - 1;
 
         if (slotTransforms != null && index < slotTransforms.Length && slotTransforms[index] != null)
-            return slotTransforms[index].position;
+            return slotTransforms[index];
 
         // Fallback: stack them in a line if no transforms assigned
-        return new Vector3(index * 1.5f, 0f, -5f);
+        return transform;
     }
 }

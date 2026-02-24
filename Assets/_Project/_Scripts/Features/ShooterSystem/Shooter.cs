@@ -28,7 +28,7 @@ public class Shooter : MonoBehaviour
     public int ColorIndex { get; private set; }
 
     private int _remainingPixels;
-    private Vector3 _slotTargetPosition;
+    private Transform _slotTargetTransform;
 
     private Sequence _currentSequence;
 
@@ -150,13 +150,13 @@ public class Shooter : MonoBehaviour
     {
         ShooterManager.Instance.ExitSpline(this);
 
-        if (!ShooterManager.Instance.TryEnterSlot(this, out Vector3 slotPos))
+        if (!ShooterManager.Instance.TryEnterSlot(this, out Transform slotPos))
         {
             SetState(State.Waiting);
             return;
         }
 
-        _slotTargetPosition = slotPos;
+        _slotTargetTransform = slotPos;
         SetState(State.Slotted);
     }
 
@@ -175,6 +175,7 @@ public class Shooter : MonoBehaviour
 
         _currentSequence = Sequence.Create()
             .Group(transform.JumpTo(splineContainer.EvaluatePosition(0), 1, .5f))
+            .Group(Tween.Rotation(transform,(Vector3)splineContainer.EvaluateTangent(0)+Vector3.up*90,.5f)
             .Chain(Tween.Custom(
                 0f,
                 splineLength,
@@ -187,13 +188,16 @@ public class Shooter : MonoBehaviour
                     transform.position = pos;
 
                     Vector3 tangent = splineContainer.EvaluateTangent(normalized);
+
                     if (tangent != Vector3.zero)
-                        transform.forward = tangent.normalized;
+                    {
+                        transform.rotation = Quaternion.LookRotation(tangent, Vector3.up)* Quaternion.Euler(0f, 90f, 0f);
+                    }
 
                     SweepAndFire();
                 },
                 ease: Ease.Linear))
-            .OnComplete(FinishSpline);
+            .OnComplete(FinishSpline));
     }
 
     // ═════════════════════════════════════════════════════════════════
@@ -248,13 +252,15 @@ public class Shooter : MonoBehaviour
     private void EnterSlotMove()
     {
         float duration =
-            Vector3.Distance(transform.position, _slotTargetPosition) / moveToSlotSpeed;
+            Vector3.Distance(transform.position, _slotTargetTransform.position) / moveToSlotSpeed;
 
-        transform.JumpTo(_slotTargetPosition, 1, duration)
-            .OnComplete(() =>
-            {
-                transform.position = _slotTargetPosition;
-            });
+        Sequence.Create()
+            .Group(transform.JumpTo(_slotTargetTransform.position, 1, duration)
+                .OnComplete(() =>
+                {
+                    transform.position = _slotTargetTransform.position;
+                })
+                .Group(Tween.Rotation(transform, _slotTargetTransform.rotation.eulerAngles, duration)));
     }
 
     // ═════════════════════════════════════════════════════════════════
@@ -269,8 +275,21 @@ public class Shooter : MonoBehaviour
             ShooterManager.Instance.ExitSpline(this);
         else if (_state == State.Slotted)
             ShooterManager.Instance.ExitSlot(this);
-
-        OnRequestRelease?.Invoke(this);
+        Sequence.Create()
+            .Group(
+                Tween.Rotation(
+                        transform,
+                        transform.eulerAngles + new Vector3(0f, 90f, 0f),
+                        0.1f,
+                        Ease.Linear,cycleMode:CycleMode.Incremental,cycles:8)
+           .Group(
+                Tween.Position(transform,transform.position+Vector3.forward, .5f)))
+            .Group(
+                Tween.Scale(transform,Vector3.zero,.5f).OnComplete(() =>
+                {
+                    OnRequestRelease?.Invoke(this);
+                })
+            );
     }
 
     // ═════════════════════════════════════════════════════════════════
