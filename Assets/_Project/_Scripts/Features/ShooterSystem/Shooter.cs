@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.Splines;
 using TMPro;
-using UniRx;
 using PrimeTween;
 using System;
 
@@ -11,13 +10,13 @@ public class Shooter : MonoBehaviour
 
     public enum State { Waiting, OnSpline, Slotted }
 
-    private readonly ReactiveProperty<State> _state = new(State.Waiting);
-    public IReadOnlyReactiveProperty<State> StateStream => _state;
+    private State _state;
+    public State CurrentState => _state;
 
     // ── Inspector ─────────────────────────────────────────────────────
 
-    [SerializeField]private MeshRenderer _meshRenderer;
-    
+    [SerializeField] private MeshRenderer _meshRenderer;
+
     [Header("Spline")]
     [SerializeField] private SplineContainer splineContainer;
 
@@ -32,19 +31,15 @@ public class Shooter : MonoBehaviour
     private Vector3 _slotTargetPosition;
 
     private Sequence _currentSequence;
-    private CompositeDisposable _disposables = new();
 
-    // Line sweep
     private int _prevLineIndex = -1;
     private GridEdge _prevEdge;
-
-    // ── Events ────────────────────────────────────────────────────────
 
     public Action<Shooter> OnRequestRelease;
 
     private float splineMovementSpeed;
     private readonly float moveToSlotSpeed = 8f;
-    // ── Private ───────────────────────────────────────────────────────
+
     private MaterialPropertyBlock _mpb;
     private Color _baseColor;
 
@@ -56,21 +51,12 @@ public class Shooter : MonoBehaviour
 
     private void Awake()
     {
-        _state
-            .DistinctUntilChanged()
-            .Subscribe(OnStateChanged)
-            .AddTo(_disposables);
         _mpb = new MaterialPropertyBlock();
     }
 
     private void OnDisable()
     {
         StopAllProcesses();
-    }
-
-    private void OnDestroy()
-    {
-        _disposables.Dispose();
     }
 
     // ═════════════════════════════════════════════════════════════════
@@ -82,13 +68,13 @@ public class Shooter : MonoBehaviour
         ColorIndex = data.colorIndex;
         _remainingPixels = data.pixelCount;
         splineMovementSpeed = ShooterManager.Instance.ShooterMovementSpeed;
+
         _baseColor = data.targetColor;
         ApplyColor(_baseColor);
+
         UpdateLabel();
         SetState(State.Waiting);
     }
-
-
 
     private void ApplyColor(Color color)
     {
@@ -96,6 +82,7 @@ public class Shooter : MonoBehaviour
         _mpb.SetColor(BaseColorID, color);
         _meshRenderer.SetPropertyBlock(_mpb);
     }
+
     public void SetSpline(SplineContainer spline)
     {
         splineContainer = spline;
@@ -107,7 +94,7 @@ public class Shooter : MonoBehaviour
 
     private void OnMouseDown()
     {
-        if (_state.Value == State.Waiting || _state.Value == State.Slotted)
+        if (_state == State.Waiting || _state == State.Slotted)
             TryLaunchToSpline();
     }
 
@@ -115,7 +102,13 @@ public class Shooter : MonoBehaviour
     // State Management
     // ═════════════════════════════════════════════════════════════════
 
-    private void SetState(State newState) => _state.Value = newState;
+    private void SetState(State newState)
+    {
+        if (_state == newState) return;
+
+        _state = newState;
+        OnStateChanged(newState);
+    }
 
     private void OnStateChanged(State newState)
     {
@@ -123,8 +116,13 @@ public class Shooter : MonoBehaviour
 
         switch (newState)
         {
-            case State.OnSpline: EnterSpline(); break;
-            case State.Slotted:  EnterSlotMove(); break;
+            case State.OnSpline:
+                EnterSpline();
+                break;
+
+            case State.Slotted:
+                EnterSlotMove();
+                break;
         }
     }
 
@@ -139,9 +137,10 @@ public class Shooter : MonoBehaviour
 
     private void TryLaunchToSpline()
     {
-        if (!ShooterManager.Instance.TryEnterSpline(this)) return;
+        if (!ShooterManager.Instance.TryEnterSpline(this))
+            return;
 
-        if (_state.Value == State.Slotted)
+        if (_state == State.Slotted)
             ShooterManager.Instance.ExitSlot(this);
 
         SetState(State.OnSpline);
@@ -162,7 +161,7 @@ public class Shooter : MonoBehaviour
     }
 
     // ═════════════════════════════════════════════════════════════════
-    // Spline Movement (PrimeTween) + Line Sweep Firing
+    // Spline Movement + Line Sweep
     // ═════════════════════════════════════════════════════════════════
 
     private void EnterSpline()
@@ -172,7 +171,6 @@ public class Shooter : MonoBehaviour
         float splineLength = splineContainer.CalculateLength();
         float duration = splineLength / splineMovementSpeed;
 
-        // Reset sweep state
         _prevLineIndex = -1;
 
         _currentSequence = Sequence.Create()
@@ -185,7 +183,6 @@ public class Shooter : MonoBehaviour
                 {
                     float normalized = distance / splineLength;
 
-                    // Movement
                     Vector3 pos = splineContainer.EvaluatePosition(normalized);
                     transform.position = pos;
 
@@ -193,7 +190,6 @@ public class Shooter : MonoBehaviour
                     if (tangent != Vector3.zero)
                         transform.forward = tangent.normalized;
 
-                    // Line sweep firing
                     SweepAndFire();
                 },
                 ease: Ease.Linear))
@@ -211,7 +207,6 @@ public class Shooter : MonoBehaviour
         GridEdge currentEdge = GetCurrentEdge();
         int currentLineIndex = GetCurrentLineIndex(currentEdge);
 
-        // Corner transition: edge changed, reset sweep
         if (currentEdge != _prevEdge)
         {
             _prevEdge = currentEdge;
@@ -220,8 +215,6 @@ public class Shooter : MonoBehaviour
             return;
         }
 
-        // Same edge: fire at every line between prev and current
-        // Direction can be either increasing or decreasing
         int step = currentLineIndex >= _prevLineIndex ? 1 : -1;
 
         for (int line = _prevLineIndex + step; line != currentLineIndex + step; line += step)
@@ -249,17 +242,19 @@ public class Shooter : MonoBehaviour
     }
 
     // ═════════════════════════════════════════════════════════════════
-    // Slot Movement (PrimeTween)
+    // Slot Movement
     // ═════════════════════════════════════════════════════════════════
 
     private void EnterSlotMove()
     {
-        float duration = Vector3.Distance(transform.position, _slotTargetPosition) / moveToSlotSpeed;
+        float duration =
+            Vector3.Distance(transform.position, _slotTargetPosition) / moveToSlotSpeed;
 
-        transform.JumpTo(_slotTargetPosition, 1, duration).OnComplete(() =>
-        {
-            transform.position = _slotTargetPosition;
-        });
+        transform.JumpTo(_slotTargetPosition, 1, duration)
+            .OnComplete(() =>
+            {
+                transform.position = _slotTargetPosition;
+            });
     }
 
     // ═════════════════════════════════════════════════════════════════
@@ -270,9 +265,9 @@ public class Shooter : MonoBehaviour
     {
         StopAllProcesses();
 
-        if (_state.Value == State.OnSpline)
+        if (_state == State.OnSpline)
             ShooterManager.Instance.ExitSpline(this);
-        else if (_state.Value == State.Slotted)
+        else if (_state == State.Slotted)
             ShooterManager.Instance.ExitSlot(this);
 
         OnRequestRelease?.Invoke(this);
@@ -284,9 +279,14 @@ public class Shooter : MonoBehaviour
 
     private GridEdge GetCurrentEdge()
     {
-        Vector3 toShooter = transform.position - PixelGrid.Instance.GridBounds.center;
-        float normX = Mathf.Abs(toShooter.x) / PixelGrid.Instance.GridBounds.extents.x;
-        float normZ = Mathf.Abs(toShooter.z) / PixelGrid.Instance.GridBounds.extents.z;
+        Vector3 toShooter =
+            transform.position - PixelGrid.Instance.GridBounds.center;
+
+        float normX =
+            Mathf.Abs(toShooter.x) / PixelGrid.Instance.GridBounds.extents.x;
+
+        float normZ =
+            Mathf.Abs(toShooter.z) / PixelGrid.Instance.GridBounds.extents.z;
 
         if (normZ >= normX)
             return toShooter.z > 0 ? GridEdge.Top : GridEdge.Bottom;
@@ -298,8 +298,12 @@ public class Shooter : MonoBehaviour
     {
         return edge switch
         {
-            GridEdge.Top    or GridEdge.Bottom => PixelGrid.Instance.WorldXToCol(transform.position.x),
-            GridEdge.Left   or GridEdge.Right  => PixelGrid.Instance.WorldZToRow(transform.position.z),
+            GridEdge.Top or GridEdge.Bottom =>
+                PixelGrid.Instance.WorldXToCol(transform.position.x),
+
+            GridEdge.Left or GridEdge.Right =>
+                PixelGrid.Instance.WorldZToRow(transform.position.z),
+
             _ => 0
         };
     }
