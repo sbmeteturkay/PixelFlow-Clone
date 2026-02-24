@@ -61,12 +61,14 @@ public static class PixelArtImporter
                 data.pixels.Add(colorToIndex[c]);
             }
         }
+        data.ReverseArrangePixels();
 
         string savePath = EditorUtility.SaveFilePanelInProject(
             "Save PixelArtData",
             texture.name + "_Data",
             "asset",
-            "Save PixelArtData"
+            "Save PixelArtData",
+            path:"Assets/_Project/Level/PixelArtData"
         );
 
         if (!string.IsNullOrEmpty(savePath))

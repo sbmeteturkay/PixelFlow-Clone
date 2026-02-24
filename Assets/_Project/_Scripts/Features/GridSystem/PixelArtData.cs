@@ -35,6 +35,11 @@ public class PixelArtData : ScriptableObject
         for (int i = 0; i < pixels.Count; i++) pixels[i] = -1;
     }
 
+    public void ReverseArrangePixels()
+    {
+        pixels.Reverse();
+    }
+
 #if UNITY_EDITOR
     private void OnValidate()
     {

@@ -25,8 +25,10 @@ public class Shooter : MonoBehaviour
 
     // ── Runtime ───────────────────────────────────────────────────────
 
-    public int ColorIndex { get; private set; }
+    private int ColorIndex { get; set; }
 
+    private bool _interactable;
+    
     private int _remainingPixels;
     private Transform _slotTargetTransform;
 
@@ -38,7 +40,7 @@ public class Shooter : MonoBehaviour
     public Action<Shooter> OnRequestRelease;
 
     private float splineMovementSpeed;
-    private readonly float moveToSlotSpeed = 8f;
+    private readonly float moveToSlotSpeed = 16f;
 
     private MaterialPropertyBlock _mpb;
     private Color _baseColor;
@@ -94,6 +96,8 @@ public class Shooter : MonoBehaviour
 
     private void OnMouseDown()
     {
+        if (!_interactable)
+            return;
         if (_state == State.Waiting || _state == State.Slotted)
             TryLaunchToSpline();
     }
@@ -143,6 +147,7 @@ public class Shooter : MonoBehaviour
         if (_state == State.Slotted)
             ShooterManager.Instance.ExitSlot(this);
 
+        LevelManager.Instance.OnShooterLeftWaiting(this);
         SetState(State.OnSpline);
     }
 
@@ -174,8 +179,8 @@ public class Shooter : MonoBehaviour
         _prevLineIndex = -1;
 
         _currentSequence = Sequence.Create()
-            .Group(transform.JumpTo(splineContainer.EvaluatePosition(0), 1, .5f))
-            .Group(Tween.Rotation(transform,(Vector3)splineContainer.EvaluateTangent(0)+Vector3.up*90,.5f)
+            .Group(transform.JumpTo(splineContainer.EvaluatePosition(0), 2, .4f))
+            .Group(Tween.Rotation(transform,(Vector3)splineContainer.EvaluateTangent(0)+Vector3.up*90,.4f,ease:Ease.InBack)
             .Chain(Tween.Custom(
                 0f,
                 splineLength,
@@ -235,6 +240,7 @@ public class Shooter : MonoBehaviour
         if (target.ColorIndex==ColorIndex)
         {
             RegisterHit();
+            Tween.PunchScale(transform, Vector3.one*.5f, .1f);
             BulletPool.Instance.Fire(transform.position, target,ColorIndex,10);
         }
     }
@@ -258,7 +264,7 @@ public class Shooter : MonoBehaviour
             Vector3.Distance(transform.position, _slotTargetTransform.position) / moveToSlotSpeed;
 
         Sequence.Create()
-            .Group(transform.JumpTo(_slotTargetTransform.position, 1, duration)
+            .Group(transform.JumpTo(_slotTargetTransform.position, 2, duration)
                 .OnComplete(() =>
                 {
                     transform.position = _slotTargetTransform.position;
@@ -338,5 +344,16 @@ public class Shooter : MonoBehaviour
     {
         if (pixelCountLabel != null)
             pixelCountLabel.text = _remainingPixels.ToString();
+    }
+
+    public void MoveTo(Vector3 getWaitingPosition)
+    {
+        transform.JumpTo(getWaitingPosition, 1, .4f);
+    }
+
+    public void SetInteractable(bool interactable)
+    {
+        _interactable = interactable;
+        pixelCountLabel.alpha = interactable ? 1 : .6f;
     }
 }

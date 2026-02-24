@@ -25,6 +25,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - TCP2_MOBILE
   - TCP2_OUTLINE_CONST_SIZE
   - TCP2_REFLECTIONS_FRESNEL
   - TCP2_RIM_LIGHTING_LIGHTMASK
@@ -144,8 +145,8 @@ Material:
     - _DstBlendAlpha: 0
     - _EmissionChannel: 4
     - _EnvironmentReflections: 0
-    - _FresnelMax: 1.5
-    - _FresnelMin: 0
+    - _FresnelMax: 1.408
+    - _FresnelMin: 1.347
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossinessSource: 0
@@ -171,7 +172,7 @@ Material:
     - _OutlinePixelSizeType: 1
     - _OutlineTextureLOD: 5
     - _OutlineTextureType: 0
-    - _OutlineWidth: 2
+    - _OutlineWidth: 1.27
     - _Parallax: 0.005
     - _QueueOffset: 0
     - _RampBands: 4
@@ -184,7 +185,7 @@ Material:
     - _ReceiveShadows: 0
     - _ReceiveShadowsOff: 0
     - _ReflectionMapType: 0
-    - _ReflectionSmoothness: 0.5
+    - _ReflectionSmoothness: 1
     - _RenderingMode: 0
     - _RimMax: 1
     - _RimMin: 0.5
@@ -206,10 +207,10 @@ Material:
     - _SpecSource: 0
     - _SpecularHighlights: 1
     - _SpecularMapType: 0
-    - _SpecularRoughness: 0.5
+    - _SpecularRoughness: 1
     - _SpecularStep: 0.489
     - _SpecularStepSmooth: 0.478
-    - _SpecularToonSize: 0.25
+    - _SpecularToonSize: 0.334
     - _SpecularToonSmoothness: 0.05
     - _SpecularType: 0
     - _SrcBlend: 1
@@ -222,7 +223,7 @@ Material:
     - _UseFresnelReflections: 1
     - _UseMatCap: 0
     - _UseMatCapMask: 0
-    - _UseMobileMode: 0
+    - _UseMobileMode: 1
     - _UseNormalMap: 0
     - _UseOcclusion: 0
     - _UseOutline: 1
@@ -247,6 +248,6 @@ Material:
     - _SColor: {r: 0, g: 0, b: 0, a: 1}
     - _ShnColor: {r: 1, g: 1, b: 0, a: 1}
     - _SpecColor: {r: 0.19999993, g: 0.19999993, b: 0.19999993, a: 0.5}
-    - _SpecularColor: {r: 8, g: 8, b: 8, a: 1}
+    - _SpecularColor: {r: 4.6805186, g: 4.6805186, b: 4.6805186, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
