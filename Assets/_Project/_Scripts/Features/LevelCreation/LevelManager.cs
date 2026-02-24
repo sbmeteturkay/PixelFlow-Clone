@@ -16,9 +16,6 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private Transform waitingAreaRoot;
     [SerializeField] private float waitingSpacing = 1.5f;
 
-    [Header("Spawn")]
-    [SerializeField] private float spawnDelay = 0.1f;
-
     // ── Singleton ─────────────────────────────────────────────────────
     public static LevelManager Instance { get; private set; }
 
