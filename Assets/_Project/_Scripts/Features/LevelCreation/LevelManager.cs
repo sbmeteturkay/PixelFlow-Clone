@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Splines;
-using System.Collections;
 using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour
@@ -18,20 +17,25 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private float waitingSpacing = 1.5f;
 
     [Header("Spawn")]
-    [SerializeField] private float spawnDelay = 0.1f;   // seconds between each shooter spawn
+    [SerializeField] private float spawnDelay = 0.1f;
 
     // ── Singleton ─────────────────────────────────────────────────────
     public static LevelManager Instance { get; private set; }
 
     // ── Runtime ───────────────────────────────────────────────────────
-    private List<Shooter> _waitingShooters = new List<Shooter>();
+    private List<Shooter> _waitingShooters = new();
     private bool _levelActive = false;
 
     // ─────────────────────────────────────────────────────────────────
 
     private void Awake()
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         Instance = this;
     }
 
@@ -50,41 +54,39 @@ public class LevelManager : MonoBehaviour
         levelData = data;
         _levelActive = true;
 
-        // Build grid
-        pixelGrid.BuildGrid(data.pixelArt,data.colorTolerance);
+        pixelGrid.BuildGrid(data.pixelArt, data.colorTolerance);
         pixelGrid.OnLevelComplete += HandleWin;
-
-        // Subscribe to lose condition
         ShooterManager.Instance.OnLose += HandleLose;
 
-        // Spawn shooters into waiting area
-        StartCoroutine(SpawnShooters(data.shooters));
+        SpawnShooters(data.shooters);
     }
 
     private void EndLevel()
     {
         _levelActive = false;
+
         pixelGrid.OnLevelComplete -= HandleWin;
         ShooterManager.Instance.OnLose -= HandleLose;
+
     }
 
+
     // ═════════════════════════════════════════════════════════════════
-    // Shooter Spawning
+    // Shooter Spawning 
     // ═════════════════════════════════════════════════════════════════
 
-    private IEnumerator SpawnShooters(List<ShooterData> shooterDataList)
+    private void SpawnShooters(List<ShooterData> shooterDataList)
     {
         _waitingShooters.Clear();
 
         for (int i = 0; i < shooterDataList.Count; i++)
         {
             Vector3 spawnPos = GetWaitingPosition(i);
+
             Shooter shooter = ShooterPool.Instance.Get(shooterDataList[i], spawnPos);
             shooter.SetSpline(shooterSpline);
-            _waitingShooters.Add(shooter);
 
-            if (spawnDelay > 0f)
-                yield return new WaitForSeconds(spawnDelay);
+            _waitingShooters.Add(shooter);
         }
     }
 
@@ -93,7 +95,8 @@ public class LevelManager : MonoBehaviour
         if (waitingAreaRoot == null)
             return new Vector3(index * waitingSpacing, 0f, -8f);
 
-        return waitingAreaRoot.position + waitingAreaRoot.right * (index * waitingSpacing);
+        return waitingAreaRoot.position +
+               waitingAreaRoot.right * (index * waitingSpacing);
     }
 
     // ═════════════════════════════════════════════════════════════════
@@ -103,17 +106,17 @@ public class LevelManager : MonoBehaviour
     private void HandleWin()
     {
         if (!_levelActive) return;
+
         EndLevel();
         Debug.Log("[LevelManager] Level complete!");
-        // TODO: trigger win UI / next level
     }
 
     private void HandleLose()
     {
         if (!_levelActive) return;
+
         EndLevel();
         Debug.Log("[LevelManager] Game over — slot area full!");
-        // TODO: trigger lose UI / retry
     }
 
     // ═════════════════════════════════════════════════════════════════
@@ -122,7 +125,8 @@ public class LevelManager : MonoBehaviour
 
     public void RetryLevel()
     {
-        // Release all active shooters back to pool
+        EndLevel();
+
         foreach (Shooter s in _waitingShooters)
             if (s != null && s.gameObject.activeSelf)
                 ShooterPool.Instance.Release(s);
