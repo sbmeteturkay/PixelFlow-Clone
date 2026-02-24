@@ -51,7 +51,7 @@ public class LevelManager : MonoBehaviour
         _levelActive = true;
 
         // Build grid
-        pixelGrid.BuildGrid(data.pixelArt);
+        pixelGrid.BuildGrid(data.pixelArt,data.colorTolerance);
         pixelGrid.OnLevelComplete += HandleWin;
 
         // Subscribe to lose condition

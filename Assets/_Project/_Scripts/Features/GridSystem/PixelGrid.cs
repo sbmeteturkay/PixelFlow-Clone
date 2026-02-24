@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PixelGrid : MonoBehaviour
@@ -41,8 +42,7 @@ public class PixelGrid : MonoBehaviour
     // Grid Construction
     // ═════════════════════════════════════════════════════════════════
 
-    //todo: colorTolerance
-    public void BuildGrid(PixelArtData data)
+    public void BuildGrid(PixelArtData data, float dataColorTolerance)
     {
         ClearGrid();
         artData = data;
@@ -51,19 +51,25 @@ public class PixelGrid : MonoBehaviour
         _totalLiveCells = 0;
         _destroyedCells = 0;
 
-        // Center the grid on this transform's position (X/Z plane, Y = 0)
+        Dictionary<int, int> indexToCluster = LevelCreationExtensions.BuildColorClusters(data, dataColorTolerance);
+
         float originX = transform.position.x - (data.columns * cellSize) * 0.5f + cellSize * 0.5f;
         float originZ = transform.position.z - (data.rows * cellSize) * 0.5f + cellSize * 0.5f;
-        float y = transform.position.y+cellSize/2;
+        float y = transform.position.y + cellSize / 2;
 
         for (int row = 0; row < data.rows; row++)
         {
             for (int col = 0; col < data.columns; col++)
             {
-                int colorIdx = data.GetPixelIndex(col, row);
-                Color color = data.GetPixelColor(col, row);
+                int paletteIndex = data.GetPixelIndex(col, row);
+                if (paletteIndex < 0) continue;
 
-                // Row 0 = top of the image → positive Z, rows go toward negative Z
+                // 🔥 shooter ile eşleşecek index
+                int clusterIndex = indexToCluster[paletteIndex];
+
+                // 🔥 görsel renk değişmiyor
+                Color color = data.palette[paletteIndex].color;
+
                 Vector3 pos = new Vector3(
                     originX + col * cellSize,
                     y,
@@ -72,9 +78,11 @@ public class PixelGrid : MonoBehaviour
 
                 PixelCell cell = Instantiate(cellPrefab, pos, Quaternion.identity, transform);
                 cell.gameObject.name = $"Cell_{col}_{row}";
-                cell.gameObject.transform.localScale = Vector3.one * cellSize;
+                cell.transform.localScale = Vector3.one * cellSize;
 
-                cell.Initialize(col, row, colorIdx, color);
+                // 🔥 burada clusterIndex veriyoruz
+                cell.Initialize(col, row, clusterIndex, color);
+
                 _cells[col, row] = cell;
 
                 if (!cell.IsEmpty) _totalLiveCells++;
