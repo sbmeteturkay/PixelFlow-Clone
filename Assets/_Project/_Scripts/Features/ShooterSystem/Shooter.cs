@@ -44,6 +44,7 @@ public class Shooter : MonoBehaviour
 
     private MaterialPropertyBlock _mpb;
     private Color _baseColor;
+    private Vector3 defaultScale;
 
     private static readonly int BaseColorID = Shader.PropertyToID("_BaseColor");
 
@@ -54,6 +55,7 @@ public class Shooter : MonoBehaviour
     private void Awake()
     {
         _mpb = new MaterialPropertyBlock();
+        defaultScale=transform.localScale;
     }
 
     private void OnDisable()
@@ -67,8 +69,10 @@ public class Shooter : MonoBehaviour
 
     public void Initialize(ShooterData data)
     {
+        transform.localScale = defaultScale;
         ColorIndex = data.colorIndex;
         _remainingPixels = data.pixelCount;
+        transform.rotation = Quaternion.identity;
         splineMovementSpeed = ShooterManager.Instance.ShooterMovementSpeed;
 
         _baseColor = data.targetColor;
@@ -212,7 +216,7 @@ public class Shooter : MonoBehaviour
     private void SweepAndFire()
     {
         if (PixelGrid.Instance == null) return;
-
+        if (_remainingPixels <= 0) return;
         GridEdge currentEdge = GetCurrentEdge();
         int currentLineIndex = GetCurrentLineIndex(currentEdge);
 
@@ -235,8 +239,7 @@ public class Shooter : MonoBehaviour
     private void TryFireAtLine(GridEdge edge, int lineIndex)
     {
         PixelCell target = PixelGrid.Instance.GetFrontCell(edge, lineIndex);
-        if (target == null) return;
-
+        if (target == null || !target.IsAlive||target.IsShooted) return;
         if (target.ColorIndex==ColorIndex)
         {
             RegisterHit();
@@ -276,7 +279,7 @@ public class Shooter : MonoBehaviour
     // Pool
     // ═════════════════════════════════════════════════════════════════
 
-    private void ReturnToPool()
+    public void ReturnToPool()
     {
         StopAllProcesses();
 
@@ -299,6 +302,14 @@ public class Shooter : MonoBehaviour
                     OnRequestRelease?.Invoke(this);
                 })
             );
+    }
+
+    public void ResetShooter()
+    {
+        StopAllProcesses();
+        SetState(State.Waiting);
+        if(gameObject.activeInHierarchy)
+            OnRequestRelease?.Invoke(this);
     }
 
     // ═════════════════════════════════════════════════════════════════

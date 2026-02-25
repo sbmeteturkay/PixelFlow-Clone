@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class ShooterManager : MonoBehaviour
 {
@@ -97,5 +98,11 @@ public class ShooterManager : MonoBehaviour
 
         // Fallback: stack them in a line if no transforms assigned
         return transform;
+    }
+
+    public void ClearShooters()
+    {
+        _shootersInSlot.Clear();
+        _shootersOnSpline.Clear();
     }
 }
