@@ -17,20 +17,32 @@ MonoBehaviour:
   maxShootersPerColor: 6
   minPixelsPerShooter: 5
   maxPixelsPerShooter: 50
-  colorTolerance: 0.5
+  colorTolerance: 0.6
   shooters:
   - targetColor: {r: 0.627451, g: 0.3647059, b: 0.20392159, a: 1}
     colorIndex: 0
-    pixelCount: 27
+    pixelCount: 24
   - targetColor: {r: 0.627451, g: 0.3647059, b: 0.20392159, a: 1}
     colorIndex: 0
-    pixelCount: 23
+    pixelCount: 14
+  - targetColor: {r: 0.627451, g: 0.3647059, b: 0.20392159, a: 1}
+    colorIndex: 0
+    pixelCount: 7
+  - targetColor: {r: 0.627451, g: 0.3647059, b: 0.20392159, a: 1}
+    colorIndex: 0
+    pixelCount: 5
   - targetColor: {r: 0.97647065, g: 0.47450984, b: 0.7607844, a: 1}
     colorIndex: 1
-    pixelCount: 11
+    pixelCount: 40
   - targetColor: {r: 0.97647065, g: 0.47450984, b: 0.7607844, a: 1}
     colorIndex: 1
-    pixelCount: 121
+    pixelCount: 22
+  - targetColor: {r: 0.97647065, g: 0.47450984, b: 0.7607844, a: 1}
+    colorIndex: 1
+    pixelCount: 7
+  - targetColor: {r: 0.97647065, g: 0.47450984, b: 0.7607844, a: 1}
+    colorIndex: 1
+    pixelCount: 63
   - targetColor: {r: 0.07450981, g: 0.7294118, b: 0.078431375, a: 1}
     colorIndex: 2
     pixelCount: 5

@@ -58,9 +58,7 @@ public class LevelDataEditor : Editor
 
         PixelArtData art = level.pixelArt;
 
-        float colorTolerance = level.colorTolerance;
-
-        var indexToCluster = LevelCreationExtensions.BuildColorClusters(art, colorTolerance);
+        var indexToCluster = LevelCreationExtensions.BuildColorClusters(art, level.colorTolerance);
 
         Dictionary<int, int> clusterPixelCounts = new Dictionary<int, int>();
         Dictionary<int, Color> clusterColors = new Dictionary<int, Color>();

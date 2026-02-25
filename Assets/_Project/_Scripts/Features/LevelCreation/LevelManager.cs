@@ -1,12 +1,18 @@
+using System;
 using UnityEngine;
 using UnityEngine.Splines;
 using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour
 {
+    // ── Events ─────────────────────────────────────────────────────
+    public Action OnWin;
+    public Action OnLose;
+    
     // ── Inspector ─────────────────────────────────────────────────────
     [Header("Level")]
-    [SerializeField] private LevelData levelData;
+    [SerializeField] private List<LevelData>  levelData;
+    [SerializeField] private int levelIndex;
 
     [Header("References")]
     [SerializeField] private PixelGrid pixelGrid;
@@ -21,6 +27,7 @@ public class LevelManager : MonoBehaviour
 
     // ── Runtime ───────────────────────────────────────────────────────
     private List<Shooter> _waitingShooters = new();
+    private List<Shooter> _shooters = new();
     private Queue<Shooter>[] _columnQueues;
     private bool _levelActive = false;
 
@@ -37,7 +44,7 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         if (levelData != null)
-            StartLevel(levelData);
+            StartLevel(levelData[levelIndex]);
     }
 
     // ═════════════════════════════════════════════════════════════════
@@ -46,7 +53,6 @@ public class LevelManager : MonoBehaviour
 
     public void StartLevel(LevelData data)
     {
-        levelData = data;
         _levelActive = true;
 
         pixelGrid.BuildGrid(data.pixelArt, data.colorTolerance);
@@ -85,6 +91,7 @@ public class LevelManager : MonoBehaviour
             shooter.SetSpline(shooterSpline);
             shooter.SetInteractable(row == 0);
 
+            _shooters.Add(shooter);
             _columnQueues[col].Enqueue(shooter);
             _waitingShooters.Add(shooter);
         }
@@ -145,14 +152,15 @@ public class LevelManager : MonoBehaviour
     {
         if (!_levelActive) return;
         EndLevel();
-        Debug.Log("[LevelManager] Level complete!");
+        OnWin?.Invoke();
+        Debug.Log("win");
     }
 
     private void HandleLose()
     {
         if (!_levelActive) return;
         EndLevel();
-        Debug.Log("[LevelManager] Game over — slot area full!");
+        OnLose?.Invoke();
     }
 
     // ═════════════════════════════════════════════════════════════════
@@ -163,12 +171,18 @@ public class LevelManager : MonoBehaviour
     {
         EndLevel();
 
-        foreach (Shooter s in _waitingShooters)
-            if (s != null && s.gameObject.activeSelf)
-                ShooterPool.Instance.Release(s);
+        foreach (Shooter s in _shooters)
+            s.ResetShooter();
 
         _waitingShooters.Clear();
+        ShooterManager.Instance.ClearShooters();
         pixelGrid.ResetLevel();
-        StartLevel(levelData);
+        StartLevel(levelData[levelIndex]);
+    }
+
+    public void NextLevel()
+    {
+        levelIndex = (levelIndex + 1) % levelData.Count;
+        RetryLevel();
     }
 }

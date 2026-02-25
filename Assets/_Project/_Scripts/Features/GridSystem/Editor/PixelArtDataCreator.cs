@@ -1,8 +1,8 @@
+#if UNITY_EDITOR
+
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
-
-
 public static class PixelArtImporter
 {
     [MenuItem("Tools/PixelFlow/Import Pixel Art To Data")]
@@ -80,3 +80,4 @@ public static class PixelArtImporter
         }
     }
 }
+#endif

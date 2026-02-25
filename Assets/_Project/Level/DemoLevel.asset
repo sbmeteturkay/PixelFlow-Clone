@@ -12,58 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa28f2db2dd35c74fbdc2039f223417a, type: 3}
   m_Name: DemoLevel
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
-  pixelArt: {fileID: 11400000, guid: 1c69f7de70d50944a822bfb67bded1ee, type: 2}
+  pixelArt: {fileID: 11400000, guid: a6f0f79195250724f8f58b29c2e3be25, type: 2}
   minShootersPerColor: 2
   maxShootersPerColor: 6
   minPixelsPerShooter: 5
   maxPixelsPerShooter: 50
   colorTolerance: 0.5
   shooters:
-  - targetColor: {r: 0.007843138, g: 0.454902, b: 0.011764707, a: 1}
-    colorIndex: 0
-    pixelCount: 22
-  - targetColor: {r: 0.007843138, g: 0.454902, b: 0.011764707, a: 1}
-    colorIndex: 0
-    pixelCount: 6
-  - targetColor: {r: 0.007843138, g: 0.454902, b: 0.011764707, a: 1}
-    colorIndex: 0
-    pixelCount: 15
-  - targetColor: {r: 0.007843138, g: 0.454902, b: 0.011764707, a: 1}
-    colorIndex: 0
-    pixelCount: 5
-  - targetColor: {r: 0.007843138, g: 0.454902, b: 0.011764707, a: 1}
-    colorIndex: 0
-    pixelCount: 5
-  - targetColor: {r: 0.007843138, g: 0.454902, b: 0.011764707, a: 1}
-    colorIndex: 0
-    pixelCount: 5
-  - targetColor: {r: 0.38823533, g: 0.6862745, b: 0.24313727, a: 1}
-    colorIndex: 1
-    pixelCount: 12
-  - targetColor: {r: 0.38823533, g: 0.6862745, b: 0.24313727, a: 1}
-    colorIndex: 1
-    pixelCount: 35
-  - targetColor: {r: 0.38823533, g: 0.6862745, b: 0.24313727, a: 1}
-    colorIndex: 1
-    pixelCount: 7
-  - targetColor: {r: 0.38823533, g: 0.6862745, b: 0.24313727, a: 1}
-    colorIndex: 1
-    pixelCount: 5
-  - targetColor: {r: 0.38823533, g: 0.6862745, b: 0.24313727, a: 1}
-    colorIndex: 1
-    pixelCount: 7
-  - targetColor: {r: 0.38823533, g: 0.6862745, b: 0.24313727, a: 1}
-    colorIndex: 1
-    pixelCount: 5
-  - targetColor: {r: 0.39607847, g: 0.1254902, b: 0, a: 1}
+  - targetColor: {r: 0, g: 0.5411765, b: 0, a: 1}
     colorIndex: 2
     pixelCount: 5
-  - targetColor: {r: 0.39607847, g: 0.1254902, b: 0, a: 1}
+  - targetColor: {r: 0, g: 0.5411765, b: 0, a: 1}
     colorIndex: 2
+    pixelCount: 13
+  - targetColor: {r: 0.9843138, g: 0.21960786, b: 0.21960786, a: 1}
+    colorIndex: 0
+    pixelCount: 37
+  - targetColor: {r: 0.9843138, g: 0.21960786, b: 0.21960786, a: 1}
+    colorIndex: 0
+    pixelCount: 44
+  - targetColor: {r: 0.9843138, g: 0.21960786, b: 0.21960786, a: 1}
+    colorIndex: 0
     pixelCount: 8
-  - targetColor: {r: 0.39607847, g: 0.1254902, b: 0, a: 1}
-    colorIndex: 2
+  - targetColor: {r: 0.9843138, g: 0.21960786, b: 0.21960786, a: 1}
+    colorIndex: 0
+    pixelCount: 9
+  - targetColor: {r: 0.9294118, g: 0.7490196, b: 0.7490196, a: 1}
+    colorIndex: 1
     pixelCount: 6
-  - targetColor: {r: 0.8078432, g: 0.6666667, b: 0.6, a: 1}
-    colorIndex: 3
-    pixelCount: 2
