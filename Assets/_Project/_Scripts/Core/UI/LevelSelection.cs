@@ -1,0 +1,52 @@
+    using System;
+    using System.Collections.Generic;
+    using PrimeTween;
+    using TMPro;
+    using UnityEngine;
+    using UnityEngine.UI;
+
+    public class LevelSelection : MonoBehaviour
+    {
+        public static Action<int> OnLevelSelected;
+        
+        [SerializeField] private CanvasGroup canvasGroup;
+        [SerializeField] private List<TMP_Text> levelButtonsText = new List<TMP_Text>();
+        [SerializeField] private Button playButton;
+
+        protected void Start()
+        {
+            UpdateLevelSelectionButtons();
+        }
+
+
+        private void UpdateLevelSelectionButtons()
+        {
+            int currentLevel = PlayerPrefs.GetInt("CurrentLevel", 1);
+
+            playButton.onClick.RemoveAllListeners();
+            playButton.onClick.AddListener(() =>
+            {
+                OnLevelSelected?.Invoke(currentLevel);
+                Hide();
+            });
+
+            for (int i = 0; i < levelButtonsText.Count; i++)
+            {
+                TMP_Text levelButton = levelButtonsText[i];
+                levelButton.text = (currentLevel+i).ToString();
+            }
+        }
+        private void Show()
+        {
+            Tween.Alpha(canvasGroup, 1f, 0.3f);
+            canvasGroup.blocksRaycasts = true;
+            canvasGroup.interactable = true;
+        }
+
+        private void Hide()
+        {
+            Tween.Alpha(canvasGroup, 0f, 0.3f);
+            canvasGroup.blocksRaycasts = false;
+            canvasGroup.interactable = false;
+        } 
+    }

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public abstract class BasePanel : MonoBehaviour
 {
     private CanvasGroup _canvasGroup;
-    [SerializeField] Button closeButton;
+    [SerializeField] protected Button closeButton;
 
     protected virtual void Start()
     {
