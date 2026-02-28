@@ -5,110 +5,147 @@ using PrimeTween;
 
 public class ShooterManager : MonoBehaviour
 {
-    // ── Inspector ─────────────────────────────────────────────────────
-    [Header("Capacity")]
-    [SerializeField] private int splineCapacity = 5;
-    [SerializeField] private int slotCapacity = 5;
+    // ── Constants ─────────────────────────────────────────────────────
 
-    [Header("Slot Positions")]
+    public const int SplineCapacity = 5;
+    public const int SlotCapacity = 5;
+
+    // ── Inspector ─────────────────────────────────────────────────────
+
+    [Header("Slots")]
     [SerializeField] private Transform[] slotTransforms;
     [SerializeField] private Transform[] trayParentTransforms;
-    
-    [Header("Shooter Settings")]
-    [SerializeField]private float shooterMovementSpeed=3;
 
-    // ── Runtime ───────────────────────────────────────────────────────
-    private List<Shooter> _shootersOnSpline = new List<Shooter>();
-    private Dictionary<Shooter,Transform> _trayOnShooters = new ();
-    private List<Shooter> _shootersInSlot = new List<Shooter>();
-
-    // ── Events ────────────────────────────────────────────────────────
-    public System.Action OnLose;
+    [Header("Settings")]
+    [SerializeField] private float shooterMovementSpeed = 3f;
 
     // ── Singleton ─────────────────────────────────────────────────────
+
     public static ShooterManager Instance { get; private set; }
 
     // ── Properties ────────────────────────────────────────────────────
+
+    public float ShooterMovementSpeed => shooterMovementSpeed;
+    public bool IsSplineFull => _shootersOnSpline.Count >= SplineCapacity;
+    public bool IsSlotFull => _shootersInSlot.Count >= SlotCapacity;
     public int SplineCount => _shootersOnSpline.Count;
     public int SlotCount => _shootersInSlot.Count;
-    public bool IsSplineFull => _shootersOnSpline.Count >= splineCapacity;
-    public bool IsSlotFull => _shootersInSlot.Count >= slotCapacity;
-    public float ShooterMovementSpeed => shooterMovementSpeed;
+
+    // ── Events ────────────────────────────────────────────────────────
+
+    public System.Action OnLose;
+    public System.Action<int> OnTrayListCountChanged;
+
+    // ── Runtime ───────────────────────────────────────────────────────
+
+    private readonly List<Shooter> _shootersOnSpline = new();
+    private readonly List<Shooter> _shootersInSlot = new();
+    private readonly Dictionary<Shooter, Transform> _trayOnShooters = new();
+
+    private readonly List<Transform> _trayList = new();
+    private readonly List<Transform> _emptyTrayContainerList = new();
 
     // ─────────────────────────────────────────────────────────────────
-     private List<Transform> trayQueue = new List<Transform>();
-     private List<Transform> emptyTrayContainerQueue = new List<Transform>();
-    
 
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-        foreach (Transform trayParentTransform in trayParentTransforms)
-        {
-            trayQueue.Add(trayParentTransform);
-        }
+
+        if (trayParentTransforms != null)
+            foreach (Transform t in trayParentTransforms)
+                if (t != null) _trayList.Add(t);
     }
 
     // ═════════════════════════════════════════════════════════════════
     // Spline
     // ═════════════════════════════════════════════════════════════════
 
-    /// <summary>
-    /// Called by a Shooter when it wants to enter the spline.
-    /// Returns true if there is capacity.
-    /// </summary>
     public bool TryEnterSpline(Shooter shooter)
     {
-        if (IsSplineFull|| trayQueue.Count == 0) return false;
+        if (shooter == null) return false;
+        if (IsSplineFull || _trayList.Count == 0) return false;
 
-        Transform trayCarrier = trayQueue.OrderBy(c => c.position.x).Last();
-        trayQueue.Remove(trayCarrier);
-        emptyTrayContainerQueue.Add(trayCarrier);
-        Transform tray=trayCarrier.GetChild(0);
+        Transform trayCarrier = _trayList.OrderBy(c => c.position.x).Last();
+        _trayList.Remove(trayCarrier);
+        _emptyTrayContainerList.Add(trayCarrier);
+
+        if (trayCarrier.childCount == 0)
+        {
+            Debug.LogWarning("[ShooterManager] TryEnterSpline: trayCarrier has no children.");
+            _trayList.Add(trayCarrier);
+            _emptyTrayContainerList.Remove(trayCarrier);
+            return false;
+        }
+
+        Transform tray = trayCarrier.GetChild(0);
         tray.parent = null;
+
+        Vector3 splineStart = shooter.GetSpline() != null
+            ? (Vector3)shooter.GetSpline().EvaluatePosition(0)
+            : shooter.transform.position;
+
         Sequence.Create()
             .Group(Tween.EulerAngles(tray, tray.eulerAngles, Vector3.zero, 0.4001f))
-            .Group(tray.JumpTo( shooter.GetSpline().EvaluatePosition(0), 1,.4001f))
-            .OnComplete(() =>
-            {
-                tray.parent = shooter.transform;
-            });
+            .Group(tray.JumpTo(splineStart, 1, 0.4001f))
+            .OnComplete(() => tray.parent = shooter.transform);
+
         _trayOnShooters.Add(shooter, tray);
         _shootersOnSpline.Add(shooter);
+
+        OnTrayListCountChanged?.Invoke(SplineCapacity - _trayOnShooters.Count);
         return true;
     }
 
     public void ExitSpline(Shooter shooter)
     {
-        Transform emptySlot = emptyTrayContainerQueue.OrderBy(c => c.position.x).First();
-        emptyTrayContainerQueue.Remove(emptySlot);
-        Transform tray=_trayOnShooters[shooter];
-        
+        if (shooter == null) return;
+        if (!_shootersOnSpline.Contains(shooter)) return;
+
+        if (_emptyTrayContainerList.Count == 0)
+        {
+            Debug.LogWarning("[ShooterManager] ExitSpline: no empty tray containers available.");
+            _shootersOnSpline.Remove(shooter);
+            _trayOnShooters.Remove(shooter);
+            return;
+        }
+
+        if (!_trayOnShooters.TryGetValue(shooter, out Transform tray))
+        {
+            Debug.LogWarning("[ShooterManager] ExitSpline: no tray found for shooter.");
+            _shootersOnSpline.Remove(shooter);
+            return;
+        }
+
+        Transform emptySlot = _emptyTrayContainerList.OrderBy(c => c.position.x).First();
+        _emptyTrayContainerList.Remove(emptySlot);
+
         tray.parent = null;
+
         Sequence.Create()
-            .Group(tray.transform.JumpTo(emptySlot.position,1, .5f))
-            .Group(Tween.Rotation(tray, emptySlot.rotation, .5f))
+            .Group(tray.transform.JumpTo(emptySlot.position, 1, 0.5f))
+            .Group(Tween.Rotation(tray, emptySlot.rotation, 0.5f))
             .OnComplete(() =>
             {
-                 tray.parent = emptySlot;
-                 trayQueue.Add(emptySlot);
+                tray.parent = emptySlot;
+                _trayList.Add(emptySlot);
             });
+
         _trayOnShooters.Remove(shooter);
         _shootersOnSpline.Remove(shooter);
+
+        OnTrayListCountChanged?.Invoke(SplineCapacity - _trayOnShooters.Count);
     }
 
     // ═════════════════════════════════════════════════════════════════
     // Slot
     // ═════════════════════════════════════════════════════════════════
 
-    /// <summary>
-    /// Called by a Shooter when it finishes the spline and wants to enter a slot.
-    /// Returns the slot position if available, triggers lose if slot is full.
-    /// </summary>
     public bool TryEnterSlot(Shooter shooter, out Transform slotTransform)
     {
-        slotTransform = transform;
+        slotTransform = null;
+
+        if (shooter == null) return false;
 
         if (IsSlotFull)
         {
@@ -118,11 +155,20 @@ public class ShooterManager : MonoBehaviour
 
         _shootersInSlot.Add(shooter);
         slotTransform = GetNextSlotTransform();
+
+        if (slotTransform == null)
+        {
+            Debug.LogWarning("[ShooterManager] TryEnterSlot: no valid slot transform found.");
+            _shootersInSlot.Remove(shooter);
+            return false;
+        }
+
         return true;
     }
 
     public void ExitSlot(Shooter shooter)
     {
+        if (shooter == null) return;
         _shootersInSlot.Remove(shooter);
     }
 
@@ -130,16 +176,20 @@ public class ShooterManager : MonoBehaviour
     {
         int index = _shootersInSlot.Count - 1;
 
-        if (slotTransforms != null && index < slotTransforms.Length && slotTransforms[index] != null)
+        if (slotTransforms != null && index >= 0 && index < slotTransforms.Length)
             return slotTransforms[index];
 
-        // Fallback: stack them in a line if no transforms assigned
-        return transform;
+        return null;
     }
+
+    // ═════════════════════════════════════════════════════════════════
+    // Reset
+    // ═════════════════════════════════════════════════════════════════
 
     public void ClearShooters()
     {
         _shootersInSlot.Clear();
         _shootersOnSpline.Clear();
+        _trayOnShooters.Clear();
     }
 }

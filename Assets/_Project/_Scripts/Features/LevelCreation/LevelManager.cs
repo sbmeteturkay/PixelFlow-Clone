@@ -153,7 +153,6 @@ public class LevelManager : MonoBehaviour
         if (!_levelActive) return;
         EndLevel();
         OnWin?.Invoke();
-        Debug.Log("win");
     }
 
     private void HandleLose()
