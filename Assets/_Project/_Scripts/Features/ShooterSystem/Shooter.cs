@@ -16,15 +16,15 @@ public class Shooter : MonoBehaviour
     // ── Inspector ─────────────────────────────────────────────────────
 
     [SerializeField] private MeshRenderer _meshRenderer;
+    [SerializeField] private Vector3 _shootOffset;
 
-    [Header("Spline")]
-    [SerializeField] private SplineContainer splineContainer;
 
     [Header("UI")]
     [SerializeField] private TextMeshPro pixelCountLabel;
 
     // ── Runtime ───────────────────────────────────────────────────────
-
+    
+     private SplineContainer splineContainer;
     private int ColorIndex { get; set; }
 
     private bool _interactable;
@@ -93,7 +93,10 @@ public class Shooter : MonoBehaviour
     {
         splineContainer = spline;
     }
-
+    public SplineContainer GetSpline()
+    {
+        return splineContainer;
+    }
     // ═════════════════════════════════════════════════════════════════
     // Input
     // ═════════════════════════════════════════════════════════════════
@@ -102,6 +105,7 @@ public class Shooter : MonoBehaviour
     {
         if (!_interactable)
             return;
+        Tween.PunchScale(transform, Vector3.one*.5f, .1f);
         if (_state == State.Waiting || _state == State.Slotted)
             TryLaunchToSpline();
     }
@@ -243,8 +247,8 @@ public class Shooter : MonoBehaviour
         if (target.ColorIndex==ColorIndex)
         {
             RegisterHit();
-            Tween.PunchScale(transform, Vector3.one*.5f, .1f);
-            BulletPool.Instance.Fire(transform.position, target,ColorIndex,10);
+            Tween.PunchScale(_meshRenderer.gameObject.transform, Vector3.one*.5f, .1f);
+            BulletPool.Instance.Fire(transform.position+transform.TransformDirection(_shootOffset),transform.forward, target,ColorIndex,10);
         }
     }
 
@@ -295,7 +299,7 @@ public class Shooter : MonoBehaviour
                         0.1f,
                         Ease.Linear,cycleMode:CycleMode.Incremental,cycles:8)
            .Group(
-                Tween.Position(transform,transform.position+Vector3.forward, .5f,ease:Ease.InBack)))
+                Tween.Position(transform,transform.position+Vector3.forward*2, .5f,ease:Ease.InBack)))
             .Group(
                 Tween.Scale(transform,Vector3.zero,.5f,ease:Ease.InBack).OnComplete(() =>
                 {

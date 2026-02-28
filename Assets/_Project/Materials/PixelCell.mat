@@ -29,6 +29,7 @@ Material:
   - TCP2_OUTLINE_CONST_SIZE
   - TCP2_REFLECTIONS_FRESNEL
   - TCP2_RIM_LIGHTING_LIGHTMASK
+  - TCP2_SPECULAR_CRISP
   - TCP2_UV_NORMALS_FULL
   - _RECEIVE_SHADOWS_OFF
   m_InvalidKeywords:
@@ -151,7 +152,7 @@ Material:
     - _Glossiness: 0
     - _GlossinessSource: 0
     - _GlossyReflections: 0
-    - _IndirectIntensity: 1
+    - _IndirectIntensity: 0
     - _IndirectIntensityOutline: 0
     - _Lumin: 0
     - _MatCapMaskChannel: 0
@@ -172,15 +173,15 @@ Material:
     - _OutlinePixelSizeType: 1
     - _OutlineTextureLOD: 5
     - _OutlineTextureType: 0
-    - _OutlineWidth: 1.27
+    - _OutlineWidth: 1.66
     - _Parallax: 0.005
     - _QueueOffset: 0
-    - _RampBands: 4
-    - _RampBandsSmoothing: 0.1
+    - _RampBands: 7
+    - _RampBandsSmoothing: 0.782
     - _RampOffset: 0
     - _RampScale: 1
-    - _RampSmoothing: 0.174
-    - _RampThreshold: 0.783
+    - _RampSmoothing: 0.855
+    - _RampThreshold: 1
     - _RampType: 0
     - _ReceiveShadows: 0
     - _ReceiveShadowsOff: 0
@@ -207,12 +208,12 @@ Material:
     - _SpecSource: 0
     - _SpecularHighlights: 1
     - _SpecularMapType: 0
-    - _SpecularRoughness: 1
+    - _SpecularRoughness: 0.329
     - _SpecularStep: 0.489
     - _SpecularStepSmooth: 0.478
-    - _SpecularToonSize: 0.334
+    - _SpecularToonSize: 0.281
     - _SpecularToonSmoothness: 0.05
-    - _SpecularType: 0
+    - _SpecularType: 2
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Steps: 3
@@ -239,15 +240,15 @@ Material:
     - _BaseColor: {r: 0.56, g: 0.76236653, b: 1, a: 1}
     - _Color: {r: 0.56, g: 0.76236653, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HColor: {r: 0.8207547, g: 0.8207547, b: 0.8207547, a: 1}
+    - _HColor: {r: 1, g: 1, b: 1, a: 1}
     - _MatCapColor: {r: 1, g: 1, b: 1, a: 1}
     - _OtlColor: {r: 0, g: 0, b: 0, a: 1}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
     - _ReflectionColor: {r: 1, g: 1, b: 1, a: 1}
     - _RimColor: {r: 0.3874166, g: 0.38216448, b: 0.7169812, a: 1}
-    - _SColor: {r: 0, g: 0, b: 0, a: 1}
+    - _SColor: {r: 0.5377358, g: 0.5377358, b: 0.5377358, a: 1}
     - _ShnColor: {r: 1, g: 1, b: 0, a: 1}
     - _SpecColor: {r: 0.19999993, g: 0.19999993, b: 0.19999993, a: 0.5}
-    - _SpecularColor: {r: 4.6805186, g: 4.6805186, b: 4.6805186, a: 1}
+    - _SpecularColor: {r: 0.4716121, g: 0.07341132, b: 0.07341132, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

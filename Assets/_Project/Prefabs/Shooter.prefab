@@ -383,7 +383,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shooter
   _meshRenderer: {fileID: 3617747756432889299}
-  splineContainer: {fileID: 0}
+  _shootOffset: {x: 0, y: 0.2, z: 1.1}
   pixelCountLabel: {fileID: 4395062005786957909}
 --- !u!65 &1853214198299159639
 BoxCollider:

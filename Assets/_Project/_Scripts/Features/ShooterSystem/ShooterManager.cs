@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using PrimeTween;
 
 public class ShooterManager : MonoBehaviour
 {
@@ -11,12 +12,14 @@ public class ShooterManager : MonoBehaviour
 
     [Header("Slot Positions")]
     [SerializeField] private Transform[] slotTransforms;
+    [SerializeField] private Transform[] trayParentTransforms;
     
     [Header("Shooter Settings")]
     [SerializeField]private float shooterMovementSpeed=3;
 
     // ── Runtime ───────────────────────────────────────────────────────
     private List<Shooter> _shootersOnSpline = new List<Shooter>();
+    private Dictionary<Shooter,Transform> _trayOnShooters = new ();
     private List<Shooter> _shootersInSlot = new List<Shooter>();
 
     // ── Events ────────────────────────────────────────────────────────
@@ -33,11 +36,18 @@ public class ShooterManager : MonoBehaviour
     public float ShooterMovementSpeed => shooterMovementSpeed;
 
     // ─────────────────────────────────────────────────────────────────
+     private List<Transform> trayQueue = new List<Transform>();
+     private List<Transform> emptyTrayContainerQueue = new List<Transform>();
+    
 
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
+        foreach (Transform trayParentTransform in trayParentTransforms)
+        {
+            trayQueue.Add(trayParentTransform);
+        }
     }
 
     // ═════════════════════════════════════════════════════════════════
@@ -50,14 +60,41 @@ public class ShooterManager : MonoBehaviour
     /// </summary>
     public bool TryEnterSpline(Shooter shooter)
     {
-        if (IsSplineFull) return false;
+        if (IsSplineFull|| trayQueue.Count == 0) return false;
 
+        Transform trayCarrier = trayQueue.OrderBy(c => c.position.x).Last();
+        trayQueue.Remove(trayCarrier);
+        emptyTrayContainerQueue.Add(trayCarrier);
+        Transform tray=trayCarrier.GetChild(0);
+        tray.parent = null;
+        Sequence.Create()
+            .Group(Tween.EulerAngles(tray, tray.eulerAngles, Vector3.zero, 0.4001f))
+            .Group(tray.JumpTo( shooter.GetSpline().EvaluatePosition(0), 1,.4001f))
+            .OnComplete(() =>
+            {
+                tray.parent = shooter.transform;
+            });
+        _trayOnShooters.Add(shooter, tray);
         _shootersOnSpline.Add(shooter);
         return true;
     }
 
     public void ExitSpline(Shooter shooter)
     {
+        Transform emptySlot = emptyTrayContainerQueue.OrderBy(c => c.position.x).First();
+        emptyTrayContainerQueue.Remove(emptySlot);
+        Transform tray=_trayOnShooters[shooter];
+        
+        tray.parent = null;
+        Sequence.Create()
+            .Group(tray.transform.JumpTo(emptySlot.position,1, .5f))
+            .Group(Tween.Rotation(tray, emptySlot.rotation, .5f))
+            .OnComplete(() =>
+            {
+                 tray.parent = emptySlot;
+                 trayQueue.Add(emptySlot);
+            });
+        _trayOnShooters.Remove(shooter);
         _shootersOnSpline.Remove(shooter);
     }
 
