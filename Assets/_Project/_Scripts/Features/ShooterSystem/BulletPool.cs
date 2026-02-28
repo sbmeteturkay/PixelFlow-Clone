@@ -45,7 +45,7 @@ public class BulletPool : MonoBehaviour
     /// On arrival: fires hit, calls onHit, returns to pool.
     /// If target dies mid-flight, bullet is cancelled and returned.
     /// </summary>
-    public void Fire(Vector3 origin, PixelCell target, int colorIndex, float speed, Action onHit = null)
+    public void Fire(Vector3 origin,Vector3 forward, PixelCell target, int colorIndex, float speed, Action onHit = null)
     {
         if (target == null || !target.IsAlive) return;
 
@@ -53,6 +53,7 @@ public class BulletPool : MonoBehaviour
         
         GameObject bullet = _pool.Get();
         bullet.transform.position = origin;
+        bullet.transform.forward = forward;
 
         float duration = Vector3.Distance(origin, target.transform.position) / speed;
 
