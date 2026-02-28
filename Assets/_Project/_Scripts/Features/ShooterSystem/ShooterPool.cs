@@ -1,79 +1,88 @@
+using Game.Feature.Shooting;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class ShooterPool : MonoBehaviour
+namespace Game.Feature.Shooting
 {
-    // ── Inspector ─────────────────────────────────────────────────────
-    [SerializeField] private Shooter shooterPrefab;
-    [SerializeField] private int defaultCapacity = 20;
-    [SerializeField] private int maxSize = 50;
-
-    // ── Runtime ───────────────────────────────────────────────────────
-    private ObjectPool<Shooter> _pool;
-
-    // ── Singleton ─────────────────────────────────────────────────────
-    public static ShooterPool Instance { get; private set; }
-
-    // ─────────────────────────────────────────────────────────────────
-
-    private void Awake()
+    public class ShooterPool : MonoBehaviour
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
-        Instance = this;
+        // ── Inspector ─────────────────────────────────────────────────────
+        [SerializeField] private Shooter shooterPrefab;
+        [SerializeField] private int defaultCapacity = 20;
+        [SerializeField] private int maxSize = 50;
 
-        _pool = new ObjectPool<Shooter>(
-            createFunc:    CreateShooter,
-            actionOnGet:   OnGetShooter,
-            actionOnRelease: OnReleaseShooter,
-            actionOnDestroy: OnDestroyShooter,
-            collectionCheck: true,
-            defaultCapacity: defaultCapacity,
-            maxSize: maxSize
-        );
-    }
+        // ── Runtime ───────────────────────────────────────────────────────
+        private ObjectPool<Shooter> _pool;
 
-    // ═════════════════════════════════════════════════════════════════
-    // Public API
-    // ═════════════════════════════════════════════════════════════════
+        // ── Singleton ─────────────────────────────────────────────────────
+        public static ShooterPool Instance { get; private set; }
 
-    /// <summary>Get a shooter from the pool and initialize it with data.</summary>
-    public Shooter Get(ShooterData data, Vector3 position)
-    {
-        Shooter shooter = _pool.Get();
-        shooter.transform.position = position;
-        shooter.Initialize(data);
-        return shooter;
-    }
+        // ─────────────────────────────────────────────────────────────────
 
-    /// <summary>Return a shooter to the pool.</summary>
-    public void Release(Shooter shooter)
-    {
-        _pool.Release(shooter);
-    }
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
 
-    // ═════════════════════════════════════════════════════════════════
-    // Pool Callbacks
-    // ═════════════════════════════════════════════════════════════════
+            Instance = this;
 
-    private Shooter CreateShooter()
-    {
-        Shooter s = Instantiate(shooterPrefab, transform);
-        s.OnRequestRelease += Release;
-        return s;
-    }
+            _pool = new ObjectPool<Shooter>(
+                createFunc: CreateShooter,
+                actionOnGet: OnGetShooter,
+                actionOnRelease: OnReleaseShooter,
+                actionOnDestroy: OnDestroyShooter,
+                collectionCheck: true,
+                defaultCapacity: defaultCapacity,
+                maxSize: maxSize
+            );
+        }
 
-    private void OnGetShooter(Shooter shooter)
-    {
-        shooter.gameObject.SetActive(true);
-    }
+        // ═════════════════════════════════════════════════════════════════
+        // Public API
+        // ═════════════════════════════════════════════════════════════════
 
-    private void OnReleaseShooter(Shooter shooter)
-    {
-        shooter.gameObject.SetActive(false);
-    }
+        /// <summary>Get a shooter from the pool and initialize it with data.</summary>
+        public Shooter Get(ShooterData data, Vector3 position)
+        {
+            Shooter shooter = _pool.Get();
+            shooter.transform.position = position;
+            shooter.Initialize(data);
+            return shooter;
+        }
 
-    private void OnDestroyShooter(Shooter shooter)
-    {
-        shooter.OnRequestRelease -= Release;
+        /// <summary>Return a shooter to the pool.</summary>
+        public void Release(Shooter shooter)
+        {
+            _pool.Release(shooter);
+        }
+
+        // ═════════════════════════════════════════════════════════════════
+        // Pool Callbacks
+        // ═════════════════════════════════════════════════════════════════
+
+        private Shooter CreateShooter()
+        {
+            Shooter s = Instantiate(shooterPrefab, transform);
+            s.OnRequestRelease += Release;
+            return s;
+        }
+
+        private void OnGetShooter(Shooter shooter)
+        {
+            shooter.gameObject.SetActive(true);
+        }
+
+        private void OnReleaseShooter(Shooter shooter)
+        {
+            shooter.gameObject.SetActive(false);
+        }
+
+        private void OnDestroyShooter(Shooter shooter)
+        {
+            shooter.OnRequestRelease -= Release;
+        }
     }
 }

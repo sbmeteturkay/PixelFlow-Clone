@@ -2,80 +2,90 @@ using UnityEngine;
 using UnityEngine.Pool;
 using PrimeTween;
 using System;
+using Game.Feature.Level;
 
-public class BulletPool : MonoBehaviour
+namespace Game.Feature.Shooting
 {
-    // ── Inspector ─────────────────────────────────────────────────────
-
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private int defaultCapacity = 30;
-    [SerializeField] private int maxSize = 100;
-
-    // ── Singleton ─────────────────────────────────────────────────────
-
-    public static BulletPool Instance { get; private set; }
-
-    // ── Runtime ───────────────────────────────────────────────────────
-
-    private ObjectPool<GameObject> _pool;
-
-    // ─────────────────────────────────────────────────────────────────
-
-    private void Awake()
+    public class BulletPool : MonoBehaviour
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
-        Instance = this;
+        // ── Inspector ─────────────────────────────────────────────────────
 
-        _pool = new ObjectPool<GameObject>(
-            createFunc:      () => Instantiate(bulletPrefab, transform),
-            actionOnGet:     go => go.SetActive(true),
-            actionOnRelease: go => go.SetActive(false),
-            collectionCheck: true,
-            defaultCapacity: defaultCapacity,
-            maxSize:         maxSize
-        );
-    }
+        [SerializeField] private GameObject bulletPrefab;
+        [SerializeField] private int defaultCapacity = 30;
+        [SerializeField] private int maxSize = 100;
 
-    // ═════════════════════════════════════════════════════════════════
-    // Public API
-    // ═════════════════════════════════════════════════════════════════
+        // ── Singleton ─────────────────────────────────────────────────────
 
-    /// <summary>
-    /// Spawns a bullet from origin toward target.
-    /// On arrival: fires hit, calls onHit, returns to pool.
-    /// If target dies mid-flight, bullet is cancelled and returned.
-    /// </summary>
-    public void Fire(Vector3 origin,Vector3 forward, PixelCell target, int colorIndex, float speed, Action onHit = null)
-    {
-        if (target == null || !target.IsAlive) return;
+        public static BulletPool Instance { get; private set; }
 
-        target.SetShooted();
-        
-        GameObject bullet = _pool.Get();
-        bullet.transform.position = origin;
-        bullet.transform.forward = forward;
+        // ── Runtime ───────────────────────────────────────────────────────
 
-        float duration = Vector3.Distance(origin, target.transform.position) / speed;
+        private ObjectPool<GameObject> _pool;
 
-        Tween.Position(bullet.transform, target.transform.position, duration, Ease.Linear)
-            .OnComplete(() =>
+        // ─────────────────────────────────────────────────────────────────
+
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
             {
-                // Target may have been destroyed by another shooter mid-flight
-                if (target.IsAlive)
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+
+            _pool = new ObjectPool<GameObject>(
+                createFunc: () => Instantiate(bulletPrefab, transform),
+                actionOnGet: go => go.SetActive(true),
+                actionOnRelease: go => go.SetActive(false),
+                collectionCheck: true,
+                defaultCapacity: defaultCapacity,
+                maxSize: maxSize
+            );
+        }
+
+        // ═════════════════════════════════════════════════════════════════
+        // Public API
+        // ═════════════════════════════════════════════════════════════════
+
+        /// <summary>
+        /// Spawns a bullet from origin toward target.
+        /// On arrival: fires hit, calls onHit, returns to pool.
+        /// If target dies mid-flight, bullet is cancelled and returned.
+        /// </summary>
+        public void Fire(Vector3 origin, Vector3 forward, PixelCell target, int colorIndex, float speed,
+            Action onHit = null)
+        {
+            if (target == null || !target.IsAlive) return;
+
+            target.SetShooted();
+
+            GameObject bullet = _pool.Get();
+            bullet.transform.position = origin;
+            bullet.transform.forward = forward;
+
+            float duration = Vector3.Distance(origin, target.transform.position) / speed;
+
+            Tween.Position(bullet.transform, target.transform.position, duration, Ease.Linear)
+                .OnComplete(() =>
                 {
-                    PixelGrid.Instance.HandleHit(target, colorIndex);
-                    onHit?.Invoke();
-                }
+                    // Target may have been destroyed by another shooter mid-flight
+                    if (target.IsAlive)
+                    {
+                        PixelGrid.Instance.HandleHit(target, colorIndex);
+                        onHit?.Invoke();
+                    }
 
-                Release(bullet);
-            });
-    }
+                    Release(bullet);
+                });
+        }
 
-    // ─────────────────────────────────────────────────────────────────
+        // ─────────────────────────────────────────────────────────────────
 
-    private void Release(GameObject bullet)
-    {
-        Tween.StopAll(bullet.transform);
-        _pool.Release(bullet);
+        private void Release(GameObject bullet)
+        {
+            Tween.StopAll(bullet.transform);
+            _pool.Release(bullet);
+        }
     }
 }

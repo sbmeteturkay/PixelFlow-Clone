@@ -1,7 +1,6 @@
-using System;
 using UnityEngine;
 
-namespace Game.Feature.Shooter.UI
+namespace Game.Feature.Shooting.UI
 {
     public class ShooterTrayUI:MonoBehaviour
     {
