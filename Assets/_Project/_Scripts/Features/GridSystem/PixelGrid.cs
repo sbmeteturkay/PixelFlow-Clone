@@ -10,21 +10,20 @@ namespace Game.Feature.Level
         // ── Inspector ─────────────────────────────────────────────────────
         [Header("Visuals")]
         [SerializeField] private PixelCell cellPrefab;
-
         [SerializeField] private float cellSize = 0.5f;
 
-        [Header("Orbit")]
-        [Tooltip("How far outside the grid boundary shooters orbit")] [SerializeField]
-        public float orbitMargin = 1f;
+        [Header("Shooter Edge Boundaries")]
+        public float topZ;
+        public float bottomZ;
+        public float rightX;
+        public float leftX;
 
         // ── Runtime ───────────────────────────────────────────────────────
         private PixelCell[,] _cells;
         private int _totalLiveCells;
         private int _destroyedCells;
 
-        // Grid boundary on X/Z (used by shooter system)
         public Bounds GridBounds { get; private set; }
-        public Bounds OrbitBounds { get; private set; }
 
         // ── Events ────────────────────────────────────────────────────────
         public System.Action OnLevelComplete;
@@ -37,12 +36,7 @@ namespace Game.Feature.Level
 
         private void Awake()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
+            if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
         }
 
@@ -72,10 +66,7 @@ namespace Game.Feature.Level
                     int paletteIndex = data.GetPixelIndex(col, row);
                     if (paletteIndex < 0) continue;
 
-                    // 🔥 shooter ile eşleşecek index
                     int clusterIndex = indexToCluster[paletteIndex];
-
-                    // 🔥 görsel renk değişmiyor
                     Color color = data.palette[paletteIndex].color;
 
                     Vector3 pos = new Vector3(
@@ -87,12 +78,9 @@ namespace Game.Feature.Level
                     PixelCell cell = Instantiate(cellPrefab, pos, Quaternion.identity, transform);
                     cell.gameObject.name = $"Cell_{col}_{row}";
                     cell.transform.localScale = Vector3.one * cellSize;
-
-                    // 🔥 burada clusterIndex veriyoruz
                     cell.Initialize(col, row, clusterIndex, color);
 
                     _cells[col, row] = cell;
-
                     if (!cell.IsEmpty) _totalLiveCells++;
                 }
             }
@@ -111,31 +99,53 @@ namespace Game.Feature.Level
         {
             float width = artData.columns * cellSize;
             float depth = artData.rows * cellSize;
-            Vector3 center = transform.position;
-
-            // Y size is small since grid is flat (cubes have height = cellSize)
-            GridBounds = new Bounds(center, new Vector3(width, cellSize, depth));
-            OrbitBounds = new Bounds(center, new Vector3(width + orbitMargin * 2f, cellSize, depth + orbitMargin * 2f));
+            GridBounds = new Bounds(transform.position, new Vector3(width, cellSize, depth));
         }
 
         // ═════════════════════════════════════════════════════════════════
-        // Queries (used by Shooter system)
+        // Edge Detection (used by Shooter)
         // ═════════════════════════════════════════════════════════════════
 
-        /// <summary>
-        /// Returns the outermost alive cell facing the shooter's position.
-        /// The shooter calls this to know which cell is in front of it.
-        /// </summary>
+        public GridEdge GetEdgeForPosition(Vector3 worldPos)
+        {
+            bool betweenLeftRight = worldPos.x > leftX && worldPos.x < rightX;
+            bool betweenTopBottom = worldPos.z > bottomZ && worldPos.z < topZ;
+
+            if (betweenLeftRight && betweenTopBottom)
+            {
+                // Grid içinde — olmamalı ama safety
+                return GridEdge.Corner;
+            }
+
+            if (betweenLeftRight && !betweenTopBottom)
+            {
+                // Top veya Bottom, center'a göre karar ver
+                return worldPos.z > transform.position.z ? GridEdge.Top : GridEdge.Bottom;
+            }
+
+            if (betweenTopBottom && !betweenLeftRight)
+            {
+                // Left veya Right, center'a göre karar ver
+                return worldPos.x > transform.position.x ? GridEdge.Right : GridEdge.Left;
+            }
+
+            // Her iki koşul da sağlanmıyor → Corner
+            return GridEdge.Corner;
+        }
+        // ═════════════════════════════════════════════════════════════════
+        // Queries
+        // ═════════════════════════════════════════════════════════════════
+
         public PixelCell GetFrontCell(GridEdge edge, int lineIndex)
         {
             if (_cells == null) return null;
 
             return edge switch
             {
-                GridEdge.Top => GetCell(lineIndex, GetTopmostAliveRow(lineIndex)),
+                GridEdge.Top    => GetCell(lineIndex, GetTopmostAliveRow(lineIndex)),
                 GridEdge.Bottom => GetCell(lineIndex, GetBottommostAliveRow(lineIndex)),
-                GridEdge.Left => GetCell(GetLeftmostAliveCol(lineIndex), lineIndex),
-                GridEdge.Right => GetCell(GetRightmostAliveCol(lineIndex), lineIndex),
+                GridEdge.Left   => GetCell(GetLeftmostAliveCol(lineIndex), lineIndex),
+                GridEdge.Right  => GetCell(GetRightmostAliveCol(lineIndex), lineIndex),
                 _ => null
             };
         }
@@ -151,7 +161,6 @@ namespace Game.Feature.Level
         // Coordinate Conversion
         // ═════════════════════════════════════════════════════════════════
 
-        /// <summary>World X position → column index</summary>
         public int WorldXToCol(float worldX)
         {
             float originX = GridBounds.center.x - (artData.columns * cellSize) * 0.5f + cellSize * 0.5f;
@@ -159,7 +168,6 @@ namespace Game.Feature.Level
             return Mathf.Clamp(col, 0, artData.columns - 1);
         }
 
-        /// <summary>World Z position → row index</summary>
         public int WorldZToRow(float worldZ)
         {
             float originZ = GridBounds.center.z - (artData.rows * cellSize) * 0.5f + cellSize * 0.5f;
@@ -167,7 +175,6 @@ namespace Game.Feature.Level
             return Mathf.Clamp(row, 0, artData.rows - 1);
         }
 
-        /// <summary>Column + row → world position (center of that cell)</summary>
         public Vector3 CellToWorld(int col, int row)
         {
             float originX = GridBounds.center.x - (artData.columns * cellSize) * 0.5f + cellSize * 0.5f;
@@ -186,32 +193,28 @@ namespace Game.Feature.Level
         private int GetTopmostAliveRow(int col)
         {
             for (int r = 0; r < artData.rows; r++)
-                if (IsCellAlive(col, r))
-                    return r;
+                if (IsCellAlive(col, r)) return r;
             return -1;
         }
 
         private int GetBottommostAliveRow(int col)
         {
             for (int r = artData.rows - 1; r >= 0; r--)
-                if (IsCellAlive(col, r))
-                    return r;
+                if (IsCellAlive(col, r)) return r;
             return -1;
         }
 
         private int GetLeftmostAliveCol(int row)
         {
             for (int c = 0; c < artData.columns; c++)
-                if (IsCellAlive(c, row))
-                    return c;
+                if (IsCellAlive(c, row)) return c;
             return -1;
         }
 
         private int GetRightmostAliveCol(int row)
         {
             for (int c = artData.columns - 1; c >= 0; c--)
-                if (IsCellAlive(c, row))
-                    return c;
+                if (IsCellAlive(c, row)) return c;
             return -1;
         }
 
@@ -260,23 +263,46 @@ namespace Game.Feature.Level
 
         private void OnDrawGizmos()
         {
-            float width = (artData != null ? artData.columns : 30) * cellSize;
-            float depth = (artData != null ? artData.rows : 25) * cellSize;
+            float width   = (artData != null ? artData.columns : 30) * cellSize;
+            float depth   = (artData != null ? artData.rows    : 25) * cellSize;
+            float y       = transform.position.y;
+            float extent  = Mathf.Max(width, depth) * 1.5f;
 
+            // Grid bounds
             Gizmos.color = new Color(0.3f, 0.8f, 1f, 0.4f);
             Gizmos.DrawWireCube(transform.position, new Vector3(width, cellSize, depth));
 
-            Gizmos.color = new Color(1f, 0.8f, 0.2f, 0.3f);
-            Gizmos.DrawWireCube(transform.position,
-                new Vector3(width + orbitMargin * 2f, cellSize, depth + orbitMargin * 2f));
+            // Top
+            Gizmos.color = new Color(0f, 1f, 0f, 0.8f);
+            Gizmos.DrawLine(new Vector3(-extent, y, topZ), new Vector3(extent, y, topZ));
+
+            // Bottom
+            Gizmos.color = new Color(1f, 0.2f, 0.2f, 0.8f);
+            Gizmos.DrawLine(new Vector3(-extent, y, bottomZ), new Vector3(extent, y, bottomZ));
+
+            // Right
+            Gizmos.color = new Color(0.2f, 0.5f, 1f, 0.8f);
+            Gizmos.DrawLine(new Vector3(rightX, y, -extent), new Vector3(rightX, y, extent));
+
+            // Left
+            Gizmos.color = new Color(1f, 0.6f, 0f, 0.8f);
+            Gizmos.DrawLine(new Vector3(leftX, y, -extent), new Vector3(leftX, y, extent));
+
+            // Corners
+            Gizmos.color = Color.white;
+            Gizmos.DrawSphere(new Vector3(leftX,  y, topZ),    0.08f);
+            Gizmos.DrawSphere(new Vector3(rightX, y, topZ),    0.08f);
+            Gizmos.DrawSphere(new Vector3(leftX,  y, bottomZ), 0.08f);
+            Gizmos.DrawSphere(new Vector3(rightX, y, bottomZ), 0.08f);
+
+#if UNITY_EDITOR
+            UnityEditor.Handles.Label(new Vector3(extent, y, topZ),    " Top");
+            UnityEditor.Handles.Label(new Vector3(extent, y, bottomZ), " Bottom");
+            UnityEditor.Handles.Label(new Vector3(rightX, y,  extent), " Right");
+            UnityEditor.Handles.Label(new Vector3(leftX,  y,  extent), " Left");
+#endif
         }
     }
 
-    public enum GridEdge
-    {
-        Top,
-        Bottom,
-        Left,
-        Right
-    }
+    public enum GridEdge { Top, Bottom, Left, Right,Corner }
 }

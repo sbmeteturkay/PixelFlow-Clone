@@ -835,7 +835,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &161130396
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9619,7 +9619,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1688612922
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10444,7 +10444,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PixelGrid
   cellPrefab: {fileID: 4901811654039030895, guid: 972cba37559031e429779300ccd2c428, type: 3}
   cellSize: 0.33
-  orbitMargin: 0.93
+  topZ: 4.25
+  bottomZ: -6
+  rightX: 3
+  leftX: -3
 --- !u!1 &1840429996
 GameObject:
   m_ObjectHideFlags: 0

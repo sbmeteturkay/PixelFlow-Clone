@@ -193,12 +193,14 @@ namespace Game.Feature.Shooting
             float splineLength = splineContainer.CalculateLength();
             float duration = splineLength / splineMovementSpeed;
 
-            _prevLineIndex = -1;
-
+            _prevEdge = PixelGrid.Instance.GetEdgeForPosition(
+                (Vector3)splineContainer.EvaluatePosition(0));
+            _prevLineIndex = GetCurrentLineIndex(_prevEdge);
+            
             _currentSequence = Sequence.Create()
                 .Group(transform.JumpTo(splineContainer.EvaluatePosition(0), 2, .4f))
                 .Group(Tween.Rotation(transform, (Vector3)splineContainer.EvaluateTangent(0) + Vector3.up * 90, .4f,
-                        ease: Ease.InBack)
+                        ease: Ease.InBack).OnComplete(()=>Debug.Log("finish"))
                     .Chain(Tween.Custom(
                         0f,
                         splineLength,
@@ -231,20 +233,28 @@ namespace Game.Feature.Shooting
         private void SweepAndFire()
         {
             if (PixelGrid.Instance == null) return;
-            if (_remainingPixels <= 0) return;
-            GridEdge currentEdge = GetCurrentEdge();
-            int currentLineIndex = GetCurrentLineIndex(currentEdge);
+
+            GridEdge currentEdge = PixelGrid.Instance.GetEdgeForPosition(transform.position);
+
+            if (currentEdge == GridEdge.Corner)
+            {
+                _prevLineIndex = -1;
+                _prevEdge = GridEdge.Corner;
+                return;
+            }
 
             if (currentEdge != _prevEdge)
             {
                 _prevEdge = currentEdge;
-                _prevLineIndex = currentLineIndex;
-                TryFireAtLine(currentEdge, currentLineIndex);
+                _prevLineIndex = GetCurrentLineIndex(currentEdge);
+                TryFireAtLine(currentEdge, _prevLineIndex);
                 return;
             }
 
-            int step = currentLineIndex >= _prevLineIndex ? 1 : -1;
+            int currentLineIndex = GetCurrentLineIndex(currentEdge);
+            if (currentLineIndex == _prevLineIndex) return;
 
+            int step = currentLineIndex > _prevLineIndex ? 1 : -1;
             for (int line = _prevLineIndex + step; line != currentLineIndex + step; line += step)
                 TryFireAtLine(currentEdge, line);
 
@@ -332,19 +342,7 @@ namespace Game.Feature.Shooting
 
         private GridEdge GetCurrentEdge()
         {
-            Vector3 toShooter =
-                transform.position - PixelGrid.Instance.GridBounds.center;
-
-            float normX =
-                Mathf.Abs(toShooter.x) / PixelGrid.Instance.GridBounds.extents.x;
-
-            float normZ =
-                Mathf.Abs(toShooter.z) / PixelGrid.Instance.GridBounds.extents.z;
-
-            if (normZ >= normX)
-                return toShooter.z > 0 ? GridEdge.Top : GridEdge.Bottom;
-            else
-                return toShooter.x > 0 ? GridEdge.Right : GridEdge.Left;
+            return PixelGrid.Instance.GetEdgeForPosition(transform.position);
         }
 
         private int GetCurrentLineIndex(GridEdge edge)
