@@ -200,7 +200,7 @@ namespace Game.Feature.Shooting
             _currentSequence = Sequence.Create()
                 .Group(transform.JumpTo(splineContainer.EvaluatePosition(0), 2, .4f))
                 .Group(Tween.Rotation(transform, (Vector3)splineContainer.EvaluateTangent(0) + Vector3.up * 90, .4f,
-                        ease: Ease.InBack).OnComplete(()=>Debug.Log("finish"))
+                        ease: Ease.InBack))
                     .Chain(Tween.Custom(
                         0f,
                         splineLength,
@@ -223,7 +223,7 @@ namespace Game.Feature.Shooting
                             SweepAndFire();
                         },
                         ease: Ease.Linear))
-                    .OnComplete(FinishSpline));
+                    .OnComplete(FinishSpline);
         }
 
         // ═════════════════════════════════════════════════════════════════

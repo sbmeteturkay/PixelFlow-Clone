@@ -185,7 +185,7 @@ namespace Game.Feature.Shooting
         {
             int index = _shootersInSlot.Count - 1;
 
-            if (slotTransforms != null && index >= 0 && index < slotTransforms.Length)
+            if (index >= 0 && index < slotTransforms.Length)
                 return slotTransforms[index];
 
             return null;
