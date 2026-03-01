@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Splines;
 using System.Collections.Generic;
+using System.Linq;
 using Game.Feature.Shooting;
 
 namespace Game.Feature.Level
@@ -14,8 +15,6 @@ namespace Game.Feature.Level
         public Action<int> OnLevelStart;
 
         // ── Inspector ─────────────────────────────────────────────────────
-        [Header("Level")]
-        [SerializeField] private List<LevelData> levelData;
 
         [SerializeField] private int levelIndex;
 
@@ -33,6 +32,7 @@ namespace Game.Feature.Level
         public static LevelManager Instance { get; private set; }
 
         // ── Runtime ───────────────────────────────────────────────────────
+        private List<LevelData> _levels=new();
         private List<Shooter> _waitingShooters = new();
         private List<Shooter> _shooters = new();
         private Queue<Shooter>[] _columnQueues;
@@ -56,8 +56,13 @@ namespace Game.Feature.Level
         private void Start()
         {
             LevelSelection.OnLevelSelected += OnLevelSelected;
+            LoadLevels();
         }
-
+        private void LoadLevels()
+        {
+            _levels = Resources.LoadAll<LevelData>("LevelData").ToList();
+            _levels = _levels.OrderBy(l => l.name).ToList();
+        }
         private void OnDestroy()
         {
             LevelSelection.OnLevelSelected -= OnLevelSelected;
@@ -66,8 +71,8 @@ namespace Game.Feature.Level
         private void OnLevelSelected(int level)
         {
             levelIndex = level-1;
-            if (levelData != null)
-                StartLevel(levelData[levelIndex% levelData.Count]);
+            if (_levels != null)
+                StartLevel(_levels[levelIndex% _levels.Count]);
         }
 
 
@@ -105,6 +110,7 @@ namespace Game.Feature.Level
             _columnQueues = new Queue<Shooter>[COLUMN_COUNT];
             for (int i = 0; i < COLUMN_COUNT; i++)
                 _columnQueues[i] = new Queue<Shooter>();
+            
 
             for (int i = 0; i < shooterDataList.Count; i++)
             {
@@ -179,7 +185,6 @@ namespace Game.Feature.Level
             EndLevel();
             PlayerPrefs.SetInt("CurrentLevel", levelIndex + 2);
             PlayerPrefs.Save();
-            Debug.Log(PlayerPrefs.GetInt("CurrentLevel"));
             OnWin?.Invoke();
         }
 
@@ -204,12 +209,12 @@ namespace Game.Feature.Level
             _waitingShooters.Clear();
             ShooterManager.Instance.ClearShooters();
             pixelGrid.ResetLevel();
-            StartLevel(levelData[levelIndex]);
+            StartLevel(_levels[levelIndex% _levels.Count]);
         }
 
         public void NextLevel()
         {
-            levelIndex = (levelIndex + 1) % levelData.Count;
+            levelIndex = (levelIndex + 1) % _levels.Count;
             RetryLevel();
         }
     }

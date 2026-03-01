@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa28f2db2dd35c74fbdc2039f223417a, type: 3}
+  m_Name: yp_grapes_Level
+  m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  pixelArt: {fileID: 11400000, guid: cca5b424a44040b48933afab6ca17471, type: 2}
+  colorTolerance: 0.25
+  shooters:
+  - targetColor: {r: 0.46078435, g: 0.014705883, b: 0.882353, a: 1}
+    colorIndex: 0
+    pixelCount: 20
+  - targetColor: {r: 0.003921569, g: 0.49803925, b: 0.0058823535, a: 1}
+    colorIndex: 2
+    pixelCount: 30
+  - targetColor: {r: 0.46078435, g: 0.014705883, b: 0.882353, a: 1}
+    colorIndex: 0
+    pixelCount: 10
+  - targetColor: {r: 0.46078435, g: 0.014705883, b: 0.882353, a: 1}
+    colorIndex: 0
+    pixelCount: 30
+  - targetColor: {r: 0.003921569, g: 0.49803925, b: 0.0058823535, a: 1}
+    colorIndex: 2
+    pixelCount: 2
+  - targetColor: {r: 0.46078435, g: 0.014705883, b: 0.882353, a: 1}
+    colorIndex: 0
+    pixelCount: 7
+  - targetColor: {r: 0.46078435, g: 0.014705883, b: 0.882353, a: 1}
+    colorIndex: 0
+    pixelCount: 30
+  - targetColor: {r: 0.46078435, g: 0.014705883, b: 0.882353, a: 1}
+    colorIndex: 0
+    pixelCount: 10
+  - targetColor: {r: 0.62352943, g: 0.25882354, b: 0.909804, a: 1}
+    colorIndex: 1
+    pixelCount: 9

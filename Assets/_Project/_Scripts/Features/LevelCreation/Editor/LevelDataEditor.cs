@@ -58,10 +58,9 @@ public class LevelDataEditor : Editor
 
         PixelArtData art = level.pixelArt;
 
-        var indexToCluster = LevelCreationExtensions.BuildColorClusters(art, level.colorTolerance);
+        var (indexToCluster, clusterColors) = LevelCreationExtensions.BuildColorClusters(art, level.colorTolerance);
 
         Dictionary<int, int> clusterPixelCounts = new Dictionary<int, int>();
-        Dictionary<int, Color> clusterColors = new Dictionary<int, Color>();
 
         for (int row = 0; row < art.rows; row++)
         {
@@ -73,10 +72,7 @@ public class LevelDataEditor : Editor
                 int cluster = indexToCluster[idx];
 
                 if (!clusterPixelCounts.ContainsKey(cluster))
-                {
                     clusterPixelCounts[cluster] = 0;
-                    clusterColors[cluster] = art.palette[idx].color;
-                }
 
                 clusterPixelCounts[cluster]++;
             }
@@ -88,11 +84,7 @@ public class LevelDataEditor : Editor
             int totalPixels = kv.Value;
 
             List<int> portions = SplitIntoParts(
-                totalPixels,
-                level.minShootersPerColor,
-                level.maxShootersPerColor,
-                level.minPixelsPerShooter,
-                level.maxPixelsPerShooter
+                totalPixels
             );
 
             foreach (int portion in portions)
@@ -113,39 +105,28 @@ public class LevelDataEditor : Editor
     /// Splits total into random parts, each between minPart and maxPart,
     /// with a count between minCount and maxCount.
     /// </summary>
-    private List<int> SplitIntoParts(int total, int minCount, int maxCount, int minPart, int maxPart)
+    private List<int> SplitIntoParts(int total)
     {
-        // Clamp shooter count to what's actually achievable given total and minPart
-        int maxAchievable = Mathf.FloorToInt((float)total / minPart);
-        int clampedMax = Mathf.Min(maxCount, maxAchievable);
-        int clampedMin = Mathf.Min(minCount, clampedMax);
+        if (total <= 0) return new List<int>();
 
-        if (clampedMin <= 0)
-        {
-            // Not enough pixels for even one shooter, make one with all pixels
-            return new List<int> { total };
-        }
+        int minCount = Mathf.Max(1, total / 50);
+        int maxCount = Mathf.Max(1, total / 20);
+        int count = Random.Range(minCount, maxCount + 1);
 
-        int count = Random.Range(clampedMin, clampedMax + 1);
-        List<int> parts = new List<int>();
-
+        List<int> parts = new();
         int remaining = total;
 
         for (int i = 0; i < count; i++)
         {
-            bool isLast = i == count - 1;
-
-            if (isLast)
+            if (i == count - 1)
             {
                 parts.Add(remaining);
                 break;
             }
 
-            // Max we can take while leaving enough for the rest
             int otherSlotsLeft = count - i - 1;
-            int mustLeave = otherSlotsLeft * minPart;
-            int canTake = Mathf.Min(maxPart, remaining - mustLeave);
-            int take = Random.Range(minPart, Mathf.Max(minPart, canTake) + 1);
+            int canTake = remaining - otherSlotsLeft;
+            int take = Random.Range(1, Mathf.Max(1, canTake) + 1);
 
             parts.Add(take);
             remaining -= take;

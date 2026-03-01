@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa28f2db2dd35c74fbdc2039f223417a, type: 3}
+  m_Name: yp_candy4_Level
+  m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  pixelArt: {fileID: 11400000, guid: bf6c9bce5750034459e5459563fa7b59, type: 2}
+  colorTolerance: 0.25
+  shooters:
+  - targetColor: {r: 0.95294124, g: 0.92549026, b: 0.92549026, a: 1}
+    colorIndex: 2
+    pixelCount: 5
+  - targetColor: {r: 0.8176471, g: 0.82745105, b: 0.83921576, a: 1}
+    colorIndex: 0
+    pixelCount: 40
+  - targetColor: {r: 0.8862746, g: 0.011764707, b: 0.011764707, a: 1}
+    colorIndex: 1
+    pixelCount: 10
+  - targetColor: {r: 0.95294124, g: 0.92549026, b: 0.92549026, a: 1}
+    colorIndex: 2
+    pixelCount: 10
+  - targetColor: {r: 0.95294124, g: 0.92549026, b: 0.92549026, a: 1}
+    colorIndex: 2
+    pixelCount: 10
+  - targetColor: {r: 0.8176471, g: 0.82745105, b: 0.83921576, a: 1}
+    colorIndex: 0
+    pixelCount: 10
+  - targetColor: {r: 0.8862746, g: 0.011764707, b: 0.011764707, a: 1}
+    colorIndex: 1
+    pixelCount: 2
+  - targetColor: {r: 0.9803922, g: 0.3372549, b: 0.3372549, a: 1}
+    colorIndex: 3
+    pixelCount: 5
+  - targetColor: {r: 0.8862746, g: 0.011764707, b: 0.011764707, a: 1}
+    colorIndex: 1
+    pixelCount: 10

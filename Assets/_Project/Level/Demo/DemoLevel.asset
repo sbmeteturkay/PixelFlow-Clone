@@ -17,26 +17,32 @@ MonoBehaviour:
   maxShootersPerColor: 6
   minPixelsPerShooter: 5
   maxPixelsPerShooter: 50
-  colorTolerance: 0.5
+  colorTolerance: 0.25
   shooters:
   - targetColor: {r: 0, g: 0.5411765, b: 0, a: 1}
-    colorIndex: 2
-    pixelCount: 5
+    colorIndex: 3
+    pixelCount: 6
   - targetColor: {r: 0, g: 0.5411765, b: 0, a: 1}
-    colorIndex: 2
-    pixelCount: 13
+    colorIndex: 3
+    pixelCount: 6
+  - targetColor: {r: 0, g: 0.5411765, b: 0, a: 1}
+    colorIndex: 3
+    pixelCount: 6
   - targetColor: {r: 0.9843138, g: 0.21960786, b: 0.21960786, a: 1}
-    colorIndex: 0
-    pixelCount: 37
-  - targetColor: {r: 0.9843138, g: 0.21960786, b: 0.21960786, a: 1}
-    colorIndex: 0
-    pixelCount: 44
-  - targetColor: {r: 0.9843138, g: 0.21960786, b: 0.21960786, a: 1}
-    colorIndex: 0
-    pixelCount: 8
-  - targetColor: {r: 0.9843138, g: 0.21960786, b: 0.21960786, a: 1}
-    colorIndex: 0
-    pixelCount: 9
-  - targetColor: {r: 0.9294118, g: 0.7490196, b: 0.7490196, a: 1}
     colorIndex: 1
+    pixelCount: 7
+  - targetColor: {r: 0.9843138, g: 0.21960786, b: 0.21960786, a: 1}
+    colorIndex: 1
+    pixelCount: 5
+  - targetColor: {r: 0.8078432, g: 0.0026143792, b: 0.0026143792, a: 1}
+    colorIndex: 0
+    pixelCount: 11
+  - targetColor: {r: 0.8078432, g: 0.0026143792, b: 0.0026143792, a: 1}
+    colorIndex: 0
+    pixelCount: 10
+  - targetColor: {r: 0.8078432, g: 0.0026143792, b: 0.0026143792, a: 1}
+    colorIndex: 0
+    pixelCount: 65
+  - targetColor: {r: 0.9294118, g: 0.7490196, b: 0.7490196, a: 1}
+    colorIndex: 2
     pixelCount: 6

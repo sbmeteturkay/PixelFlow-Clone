@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa28f2db2dd35c74fbdc2039f223417a, type: 3}
+  m_Name: yp_turkey_Level
+  m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  pixelArt: {fileID: 11400000, guid: 2ac2bd30a6335354ba6dc4d5c9c7022a, type: 2}
+  colorTolerance: 0.25
+  shooters:
+  - targetColor: {r: 0.5503268, g: 0.30980393, b: 0.1633987, a: 1}
+    colorIndex: 4
+    pixelCount: 10
+  - targetColor: {r: 0.8196079, g: 0.6784314, b: 0.45098042, a: 1}
+    colorIndex: 3
+    pixelCount: 5
+  - targetColor: {r: 0.5503268, g: 0.30980393, b: 0.1633987, a: 1}
+    colorIndex: 4
+    pixelCount: 10
+  - targetColor: {r: 0.5503268, g: 0.30980393, b: 0.1633987, a: 1}
+    colorIndex: 4
+    pixelCount: 20
+  - targetColor: {r: 0.9372549, g: 0.9372549, b: 0.9372549, a: 1}
+    colorIndex: 0
+    pixelCount: 30
+  - targetColor: {r: 0.9372549, g: 0.9372549, b: 0.9372549, a: 1}
+    colorIndex: 0
+    pixelCount: 10
+  - targetColor: {r: 0.5503268, g: 0.30980393, b: 0.1633987, a: 1}
+    colorIndex: 4
+    pixelCount: 10
+  - targetColor: {r: 0.037254903, g: 0.63529414, b: 0.039215688, a: 1}
+    colorIndex: 1
+    pixelCount: 10
+  - targetColor: {r: 0.9372549, g: 0.9372549, b: 0.9372549, a: 1}
+    colorIndex: 0
+    pixelCount: 2
+  - targetColor: {r: 0.5503268, g: 0.30980393, b: 0.1633987, a: 1}
+    colorIndex: 4
+    pixelCount: 7
+  - targetColor: {r: 0.5503268, g: 0.30980393, b: 0.1633987, a: 1}
+    colorIndex: 4
+    pixelCount: 20
+  - targetColor: {r: 0.9843138, g: 0.882353, b: 0.5372549, a: 1}
+    colorIndex: 2
+    pixelCount: 3

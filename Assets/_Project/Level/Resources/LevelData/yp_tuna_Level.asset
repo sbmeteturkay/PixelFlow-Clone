@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa28f2db2dd35c74fbdc2039f223417a, type: 3}
+  m_Name: yp_tuna_Level
+  m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  pixelArt: {fileID: 11400000, guid: e00c0ad30525f5e49879fb83b4e914cb, type: 2}
+  colorTolerance: 0.25
+  shooters:
+  - targetColor: {r: 0.43921572, g: 0.5411765, b: 0.6333333, a: 1}
+    colorIndex: 0
+    pixelCount: 10
+  - targetColor: {r: 0.6039216, g: 0.6901961, b: 0.76470596, a: 1}
+    colorIndex: 1
+    pixelCount: 10
+  - targetColor: {r: 0.6039216, g: 0.6901961, b: 0.76470596, a: 1}
+    colorIndex: 1
+    pixelCount: 4
+  - targetColor: {r: 0.6039216, g: 0.6901961, b: 0.76470596, a: 1}
+    colorIndex: 1
+    pixelCount: 40
+  - targetColor: {r: 0.43921572, g: 0.5411765, b: 0.6333333, a: 1}
+    colorIndex: 0
+    pixelCount: 3
+  - targetColor: {r: 0.6039216, g: 0.6901961, b: 0.76470596, a: 1}
+    colorIndex: 1
+    pixelCount: 10
+  - targetColor: {r: 0.43921572, g: 0.5411765, b: 0.6333333, a: 1}
+    colorIndex: 0
+    pixelCount: 30

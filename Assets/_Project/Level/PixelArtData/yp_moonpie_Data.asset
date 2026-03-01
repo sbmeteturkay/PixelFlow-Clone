@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec364ef7f0a67b14faa767a32c7ebee5, type: 3}
+  m_Name: yp_moonpie_Data
+  m_EditorClassIdentifier: Assembly-CSharp::PixelArtData
+  columns: 16
+  rows: 16
+  palette:
+  - colorName: Color 0
+    color: {r: 0.49411768, g: 0.64705884, b: 0.6509804, a: 1}
+  - colorName: Color 1
+    color: {r: 0.8196079, g: 0.6784314, b: 0.45098042, a: 1}
+  - colorName: Color 2
+    color: {r: 0.7607844, g: 0.5647059, b: 0.24705884, a: 1}
+  - colorName: Color 3
+    color: {r: 0.49411768, g: 0.3803922, b: 0.20000002, a: 1}
+  - colorName: Color 4
+    color: {r: 1, g: 0.93725497, b: 0, a: 1}
+  pixels: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff040000000400000004000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff040000000400000004000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0400000004000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff040000000400000004000000ffffffff04000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff040000000400000004000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0100000001000000010000000100000001000000010000000100000001000000ffffffffffffffffffffffffffffffffffffffffffffffff010000000100000003000000010000000300000001000000010000000300000001000000030000000100000001000000ffffffffffffffffffffffffffffffff010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000ffffffffffffffffffffffff0200000001000000020000000100000002000000010000000200000001000000020000000100000002000000010000000200000001000000ffffffffffffffffffffffff000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffff

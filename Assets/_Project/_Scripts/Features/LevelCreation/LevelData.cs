@@ -8,10 +8,6 @@ public class LevelData : ScriptableObject
     public PixelArtData pixelArt;
 
     [Header("Generation Settings")]
-    public int minShootersPerColor = 2;
-    public int maxShootersPerColor = 6;
-    public int minPixelsPerShooter = 5;
-    public int maxPixelsPerShooter = 50;
     public float colorTolerance = .5f;
 
     [Header("Generated Shooter Data")]

@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa28f2db2dd35c74fbdc2039f223417a, type: 3}
+  m_Name: yp_fries_Level
+  m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  pixelArt: {fileID: 11400000, guid: f9f666d357a0e2c4aa0b7811a3efb072, type: 2}
+  colorTolerance: 0.25
+  shooters:
+  - targetColor: {r: 0.7895425, g: 0.019607844, b: 0.019607844, a: 1}
+    colorIndex: 0
+    pixelCount: 10
+  - targetColor: {r: 0.7895425, g: 0.019607844, b: 0.019607844, a: 1}
+    colorIndex: 0
+    pixelCount: 40
+  - targetColor: {r: 0.7895425, g: 0.019607844, b: 0.019607844, a: 1}
+    colorIndex: 0
+    pixelCount: 20
+  - targetColor: {r: 0.9568628, g: 0.8862746, b: 0.55490196, a: 1}
+    colorIndex: 2
+    pixelCount: 30
+  - targetColor: {r: 0.87843144, g: 0.7803922, b: 0.29803923, a: 1}
+    colorIndex: 3
+    pixelCount: 10
+  - targetColor: {r: 0.7895425, g: 0.019607844, b: 0.019607844, a: 1}
+    colorIndex: 0
+    pixelCount: 2
+  - targetColor: {r: 1, g: 0.93725497, b: 0, a: 1}
+    colorIndex: 1
+    pixelCount: 10
+  - targetColor: {r: 0.9568628, g: 0.8862746, b: 0.55490196, a: 1}
+    colorIndex: 2
+    pixelCount: 2
+  - targetColor: {r: 0.87843144, g: 0.7803922, b: 0.29803923, a: 1}
+    colorIndex: 3
+    pixelCount: 10
+  - targetColor: {r: 0.87843144, g: 0.7803922, b: 0.29803923, a: 1}
+    colorIndex: 3
+    pixelCount: 5
+  - targetColor: {r: 0.7895425, g: 0.019607844, b: 0.019607844, a: 1}
+    colorIndex: 0
+    pixelCount: 10
+  - targetColor: {r: 0.9568628, g: 0.8862746, b: 0.55490196, a: 1}
+    colorIndex: 2
+    pixelCount: 10

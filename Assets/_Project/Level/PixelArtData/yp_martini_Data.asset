@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec364ef7f0a67b14faa767a32c7ebee5, type: 3}
+  m_Name: yp_martini_Data
+  m_EditorClassIdentifier: Assembly-CSharp::PixelArtData
+  columns: 16
+  rows: 16
+  palette:
+  - colorName: Color 0
+    color: {r: 0.8431373, g: 0.8980393, b: 0.90196085, a: 1}
+  - colorName: Color 1
+    color: {r: 0.77647066, g: 0.8431373, b: 0.8470589, a: 1}
+  - colorName: Color 2
+    color: {r: 0.7725491, g: 0.9568628, b: 0.9803922, a: 1}
+  - colorName: Color 3
+    color: {r: 0.93725497, g: 0.93725497, b: 0.93725497, a: 1}
+  - colorName: Color 4
+    color: {r: 0.7607844, g: 0.5647059, b: 0.24705884, a: 1}
+  - colorName: Color 5
+    color: {r: 0.07450981, g: 0.7294118, b: 0.078431375, a: 1}
+  - colorName: Color 6
+    color: {r: 0.93725497, g: 0, b: 0, a: 1}
+  pixels: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0600000005000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff050000000500000005000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0500000004000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffff0000000004000000030000000300000003000000030000000300000003000000030000000300000000000000ffffffffffffffffffffffffffffffffffffffffffffffff000000000200000002000000020000000200000002000000020000000200000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000020000000200000002000000020000000200000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0000000002000000020000000200000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000100000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffff

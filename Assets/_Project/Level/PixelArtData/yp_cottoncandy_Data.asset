@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec364ef7f0a67b14faa767a32c7ebee5, type: 3}
+  m_Name: yp_cottoncandy_Data
+  m_EditorClassIdentifier: Assembly-CSharp::PixelArtData
+  columns: 16
+  rows: 16
+  palette:
+  - colorName: Color 0
+    color: {r: 0, g: 0.45882356, b: 0.8117648, a: 1}
+  - colorName: Color 1
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - colorName: Color 2
+    color: {r: 0, g: 0.6666667, b: 1, a: 1}
+  - colorName: Color 3
+    color: {r: 0.77647066, g: 0.8431373, b: 0.8470589, a: 1}
+  - colorName: Color 4
+    color: {r: 0.96470594, g: 0.5529412, b: 0.76470596, a: 1}
+  - colorName: Color 5
+    color: {r: 0.97647065, g: 0.6392157, b: 0.8196079, a: 1}
+  - colorName: Color 6
+    color: {r: 0.9843138, g: 0.7411765, b: 0.8745099, a: 1}
+  - colorName: Color 7
+    color: {r: 0.9568628, g: 0.8078432, b: 0.8862746, a: 1}
+  pixels: ffffffffffffffffffffffffffffffffffffffffffffffffffffffff07000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff070000000600000007000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0700000007000000060000000600000007000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff07000000060000000400000005000000060000000600000007000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0500000005000000050000000600000005000000050000000400000007000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff070000000700000006000000040000000500000004000000040000000500000007000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff06000000060000000700000006000000060000000700000007000000070000000600000007000000ffffffffffffffffffffffffffffffffffffffffffffffff04000000050000000600000007000000050000000600000006000000060000000600000004000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff040000000700000006000000070000000500000005000000050000000500000004000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffff0700000006000000060000000500000004000000040000000400000004000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff040000000500000005000000040000000100000003000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0400000004000000010000000200000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff030000000200000001000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff020000000100000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff0100000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff00000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff

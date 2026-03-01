@@ -3482,14 +3482,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e037dfd74d4e8214dab053c871debfff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
-  levelData:
-  - {fileID: 11400000, guid: f75c220e46e5a8d46b54a1c60e8eb961, type: 2}
-  - {fileID: 11400000, guid: 32d7246c10edd954cb26a628c14d22db, type: 2}
-  - {fileID: 11400000, guid: e9805eb863feef142903028356f02ab5, type: 2}
-  - {fileID: 11400000, guid: d06f5c5aa896bc849a0cbbd1ef942d78, type: 2}
-  - {fileID: 11400000, guid: e3618fabb5d692b49a81101b6774bea1, type: 2}
-  - {fileID: 11400000, guid: 12241b2dfc7144d4f980713707e6b8de, type: 2}
-  - {fileID: 11400000, guid: c1d13ea9ef73b7047987e763cb6df68c, type: 2}
   levelIndex: 0
   pixelGrid: {fileID: 1836445887}
   shooterSpline: {fileID: 735886828}
@@ -10444,6 +10436,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PixelGrid
   cellPrefab: {fileID: 4901811654039030895, guid: 972cba37559031e429779300ccd2c428, type: 3}
   cellSize: 0.33
+  colorLerpFactor: 0.5
   topZ: 4.25
   bottomZ: -6
   rightX: 3

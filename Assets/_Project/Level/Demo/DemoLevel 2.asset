@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa28f2db2dd35c74fbdc2039f223417a, type: 3}
+  m_Name: DemoLevel 2
+  m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  pixelArt: {fileID: 11400000, guid: 59463d33a294aa348a5b69f4c43f7f93, type: 2}
+  minShootersPerColor: 2
+  maxShootersPerColor: 6
+  minPixelsPerShooter: 5
+  maxPixelsPerShooter: 50
+  colorTolerance: 0
+  shooters:
+  - targetColor: {r: 0.96470594, g: 0.96470594, b: 0.96470594, a: 1}
+    colorIndex: 5
+    pixelCount: 11
+  - targetColor: {r: 0.96470594, g: 0.96470594, b: 0.96470594, a: 1}
+    colorIndex: 5
+    pixelCount: 7
+  - targetColor: {r: 0.95294124, g: 0.94117653, b: 0.90196085, a: 1}
+    colorIndex: 4
+    pixelCount: 10
+  - targetColor: {r: 0.95294124, g: 0.94117653, b: 0.90196085, a: 1}
+    colorIndex: 4
+    pixelCount: 7
+  - targetColor: {r: 0.95294124, g: 0.94117653, b: 0.90196085, a: 1}
+    colorIndex: 4
+    pixelCount: 5
+  - targetColor: {r: 0.92549026, g: 0.9176471, b: 0.8705883, a: 1}
+    colorIndex: 0
+    pixelCount: 11
+  - targetColor: {r: 0.92549026, g: 0.9176471, b: 0.8705883, a: 1}
+    colorIndex: 0
+    pixelCount: 37
+  - targetColor: {r: 0.9568628, g: 0.9294118, b: 0.8235295, a: 1}
+    colorIndex: 6
+    pixelCount: 1
+  - targetColor: {r: 0.9843138, g: 0.882353, b: 0.5372549, a: 1}
+    colorIndex: 2
+    pixelCount: 37
+  - targetColor: {r: 0.9843138, g: 0.882353, b: 0.5372549, a: 1}
+    colorIndex: 2
+    pixelCount: 21
+  - targetColor: {r: 0.9333334, g: 0.7843138, b: 0.27450982, a: 1}
+    colorIndex: 3
+    pixelCount: 16
+  - targetColor: {r: 0.9333334, g: 0.7843138, b: 0.27450982, a: 1}
+    colorIndex: 3
+    pixelCount: 5
+  - targetColor: {r: 0.9607844, g: 0.8352942, b: 0.40000004, a: 1}
+    colorIndex: 1
+    pixelCount: 9

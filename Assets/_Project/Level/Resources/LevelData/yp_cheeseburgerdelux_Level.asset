@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa28f2db2dd35c74fbdc2039f223417a, type: 3}
+  m_Name: yp_cheeseburgerdelux_Level
+  m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  pixelArt: {fileID: 11400000, guid: 012d5b7ea01201d4f978e9233ef08a10, type: 2}
+  colorTolerance: 0.25
+  shooters:
+  - targetColor: {r: 0.76862746, g: 0.5555556, b: 0.31111112, a: 1}
+    colorIndex: 0
+    pixelCount: 30
+  - targetColor: {r: 0.5137255, g: 0.27058825, b: 0.11764707, a: 1}
+    colorIndex: 1
+    pixelCount: 10
+  - targetColor: {r: 0, g: 0.5411765, b: 0, a: 1}
+    colorIndex: 5
+    pixelCount: 10
+  - targetColor: {r: 1, g: 0.7686275, b: 0, a: 1}
+    colorIndex: 3
+    pixelCount: 10
+  - targetColor: {r: 0.93725497, g: 0, b: 0, a: 1}
+    colorIndex: 2
+    pixelCount: 10
+  - targetColor: {r: 0.2627451, g: 0.7137255, b: 0.26666668, a: 1}
+    colorIndex: 6
+    pixelCount: 7
+  - targetColor: {r: 0.76862746, g: 0.5555556, b: 0.31111112, a: 1}
+    colorIndex: 0
+    pixelCount: 20
+  - targetColor: {r: 0, g: 0.5411765, b: 0, a: 1}
+    colorIndex: 5
+    pixelCount: 5
+  - targetColor: {r: 1, g: 0.7686275, b: 0, a: 1}
+    colorIndex: 3
+    pixelCount: 10
+  - targetColor: {r: 1, g: 0.7686275, b: 0, a: 1}
+    colorIndex: 3
+    pixelCount: 10
+  - targetColor: {r: 0.76862746, g: 0.5555556, b: 0.31111112, a: 1}
+    colorIndex: 0
+    pixelCount: 10
+  - targetColor: {r: 0.2627451, g: 0.7137255, b: 0.26666668, a: 1}
+    colorIndex: 6
+    pixelCount: 10
+  - targetColor: {r: 0.76862746, g: 0.5555556, b: 0.31111112, a: 1}
+    colorIndex: 0
+    pixelCount: 10
+  - targetColor: {r: 0.76862746, g: 0.5555556, b: 0.31111112, a: 1}
+    colorIndex: 0
+    pixelCount: 6
+  - targetColor: {r: 0.94117653, g: 0.65882355, b: 0.65882355, a: 1}
+    colorIndex: 4
+    pixelCount: 9
+  - targetColor: {r: 0.76862746, g: 0.5555556, b: 0.31111112, a: 1}
+    colorIndex: 0
+    pixelCount: 40
+  - targetColor: {r: 0.5137255, g: 0.27058825, b: 0.11764707, a: 1}
+    colorIndex: 1
+    pixelCount: 4
+  - targetColor: {r: 0.9960785, g: 0.9490197, b: 0.8117648, a: 1}
+    colorIndex: 7
+    pixelCount: 8
+  - targetColor: {r: 0.93725497, g: 0, b: 0, a: 1}
+    colorIndex: 2
+    pixelCount: 2

@@ -11,7 +11,7 @@ namespace Game.Feature.Level
         [Header("Visuals")]
         [SerializeField] private PixelCell cellPrefab;
         [SerializeField] private float cellSize = 0.5f;
-
+        [SerializeField] private float colorLerpFactor = 0.6f;
         [Header("Shooter Edge Boundaries")]
         public float topZ;
         public float bottomZ;
@@ -53,8 +53,8 @@ namespace Game.Feature.Level
             _totalLiveCells = 0;
             _destroyedCells = 0;
 
-            Dictionary<int, int> indexToCluster = LevelCreationExtensions.BuildColorClusters(data, dataColorTolerance);
-
+            
+            var (indexToCluster, clusterColors) = LevelCreationExtensions.BuildColorClusters(data, dataColorTolerance);
             float originX = transform.position.x - (data.columns * cellSize) * 0.5f + cellSize * 0.5f;
             float originZ = transform.position.z - (data.rows * cellSize) * 0.5f + cellSize * 0.5f;
             float y = transform.position.y + cellSize / 2;
@@ -66,7 +66,6 @@ namespace Game.Feature.Level
                     int paletteIndex = data.GetPixelIndex(col, row);
                     if (paletteIndex < 0) continue;
 
-                    int clusterIndex = indexToCluster[paletteIndex];
                     Color color = data.palette[paletteIndex].color;
 
                     Vector3 pos = new Vector3(
@@ -78,7 +77,13 @@ namespace Game.Feature.Level
                     PixelCell cell = Instantiate(cellPrefab, pos, Quaternion.identity, transform);
                     cell.gameObject.name = $"Cell_{col}_{row}";
                     cell.transform.localScale = Vector3.one * cellSize;
-                    cell.Initialize(col, row, clusterIndex, color);
+                    
+                    int clusterIndex = indexToCluster[paletteIndex];
+                    Color average = clusterColors[clusterIndex];
+                    Color original = data.palette[paletteIndex].color;
+                    Color finalColor = Color.Lerp(original, average, colorLerpFactor);
+
+                    cell.Initialize(col, row, clusterIndex, finalColor);
 
                     _cells[col, row] = cell;
                     if (!cell.IsEmpty) _totalLiveCells++;

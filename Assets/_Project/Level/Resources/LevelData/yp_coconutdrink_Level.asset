@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa28f2db2dd35c74fbdc2039f223417a, type: 3}
+  m_Name: yp_coconutdrink_Level
+  m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  pixelArt: {fileID: 11400000, guid: ce41072aae7963c48b6d6a2db46155a4, type: 2}
+  colorTolerance: 0.25
+  shooters:
+  - targetColor: {r: 0.95490205, g: 0.9509804, b: 0.9509804, a: 1}
+    colorIndex: 1
+    pixelCount: 4
+  - targetColor: {r: 0.93725497, g: 0, b: 0, a: 1}
+    colorIndex: 5
+    pixelCount: 1
+  - targetColor: {r: 0.27058825, g: 0.18300654, b: 0.14640523, a: 1}
+    colorIndex: 0
+    pixelCount: 10
+  - targetColor: {r: 0, g: 0.8745099, b: 0.8745099, a: 1}
+    colorIndex: 3
+    pixelCount: 10
+  - targetColor: {r: 0.27058825, g: 0.18300654, b: 0.14640523, a: 1}
+    colorIndex: 0
+    pixelCount: 10
+  - targetColor: {r: 0.8745099, g: 0.5411765, b: 0, a: 1}
+    colorIndex: 4
+    pixelCount: 2
+  - targetColor: {r: 0.27058825, g: 0.18300654, b: 0.14640523, a: 1}
+    colorIndex: 0
+    pixelCount: 20
+  - targetColor: {r: 0.27058825, g: 0.18300654, b: 0.14640523, a: 1}
+    colorIndex: 0
+    pixelCount: 10
+  - targetColor: {r: 0.27058825, g: 0.18300654, b: 0.14640523, a: 1}
+    colorIndex: 0
+    pixelCount: 20
+  - targetColor: {r: 0.27058825, g: 0.18300654, b: 0.14640523, a: 1}
+    colorIndex: 0
+    pixelCount: 20
+  - targetColor: {r: 0.95490205, g: 0.9509804, b: 0.9509804, a: 1}
+    colorIndex: 1
+    pixelCount: 10
+  - targetColor: {r: 0.8117648, g: 0, b: 0.93725497, a: 1}
+    colorIndex: 2
+    pixelCount: 7
+  - targetColor: {r: 0.27058825, g: 0.18300654, b: 0.14640523, a: 1}
+    colorIndex: 0
+    pixelCount: 10
+  - targetColor: {r: 0.27058825, g: 0.18300654, b: 0.14640523, a: 1}
+    colorIndex: 0
+    pixelCount: 8

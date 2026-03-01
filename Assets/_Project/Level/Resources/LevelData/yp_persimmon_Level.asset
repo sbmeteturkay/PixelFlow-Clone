@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa28f2db2dd35c74fbdc2039f223417a, type: 3}
+  m_Name: yp_persimmon_Level
+  m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  pixelArt: {fileID: 11400000, guid: c7811dc4645ac9a43bfd4686dd1bb261, type: 2}
+  colorTolerance: 0.25
+  shooters:
+  - targetColor: {r: 0.85098046, g: 0.41830072, b: 0.08496732, a: 1}
+    colorIndex: 0
+    pixelCount: 4
+  - targetColor: {r: 0.007843138, g: 0.454902, b: 0.011764707, a: 1}
+    colorIndex: 2
+    pixelCount: 20
+  - targetColor: {r: 0.007843138, g: 0.454902, b: 0.011764707, a: 1}
+    colorIndex: 2
+    pixelCount: 10
+  - targetColor: {r: 0.85098046, g: 0.41830072, b: 0.08496732, a: 1}
+    colorIndex: 0
+    pixelCount: 20
+  - targetColor: {r: 0.93725497, g: 0.5686275, b: 0.28627452, a: 1}
+    colorIndex: 1
+    pixelCount: 8
+  - targetColor: {r: 0.007843138, g: 0.454902, b: 0.011764707, a: 1}
+    colorIndex: 2
+    pixelCount: 7
+  - targetColor: {r: 0.85098046, g: 0.41830072, b: 0.08496732, a: 1}
+    colorIndex: 0
+    pixelCount: 40
+  - targetColor: {r: 0.007843138, g: 0.454902, b: 0.011764707, a: 1}
+    colorIndex: 2
+    pixelCount: 10
+  - targetColor: {r: 0.85098046, g: 0.41830072, b: 0.08496732, a: 1}
+    colorIndex: 0
+    pixelCount: 20
+  - targetColor: {r: 0.85098046, g: 0.41830072, b: 0.08496732, a: 1}
+    colorIndex: 0
+    pixelCount: 10

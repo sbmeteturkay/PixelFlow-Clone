@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa28f2db2dd35c74fbdc2039f223417a, type: 3}
+  m_Name: yp_watermelon_Level
+  m_EditorClassIdentifier: Assembly-CSharp::LevelData
+  pixelArt: {fileID: 11400000, guid: a446539751eb4094b87d43dbd22b389a, type: 2}
+  colorTolerance: 0.25
+  shooters:
+  - targetColor: {r: 0.011764707, g: 0.427451, b: 0.011764707, a: 1}
+    colorIndex: 0
+    pixelCount: 6
+  - targetColor: {r: 0, g: 0, b: 0, a: 1}
+    colorIndex: 4
+    pixelCount: 7
+  - targetColor: {r: 0.61960787, g: 0.86274517, b: 0.75294125, a: 1}
+    colorIndex: 2
+    pixelCount: 10
+  - targetColor: {r: 0.61960787, g: 0.86274517, b: 0.75294125, a: 1}
+    colorIndex: 2
+    pixelCount: 10
+  - targetColor: {r: 0.93725497, g: 0, b: 0, a: 1}
+    colorIndex: 3
+    pixelCount: 3
+  - targetColor: {r: 0.011764707, g: 0.427451, b: 0.011764707, a: 1}
+    colorIndex: 0
+    pixelCount: 10
+  - targetColor: {r: 0, g: 0.7294118, b: 0.39607847, a: 1}
+    colorIndex: 1
+    pixelCount: 10
+  - targetColor: {r: 0.011764707, g: 0.427451, b: 0.011764707, a: 1}
+    colorIndex: 0
+    pixelCount: 20
+  - targetColor: {r: 0, g: 0.7294118, b: 0.39607847, a: 1}
+    colorIndex: 1
+    pixelCount: 4
+  - targetColor: {r: 0.61960787, g: 0.86274517, b: 0.75294125, a: 1}
+    colorIndex: 2
+    pixelCount: 10
+  - targetColor: {r: 0.011764707, g: 0.427451, b: 0.011764707, a: 1}
+    colorIndex: 0
+    pixelCount: 10
+  - targetColor: {r: 0, g: 0.7294118, b: 0.39607847, a: 1}
+    colorIndex: 1
+    pixelCount: 10
+  - targetColor: {r: 0.93725497, g: 0, b: 0, a: 1}
+    colorIndex: 3
+    pixelCount: 30
+  - targetColor: {r: 0.011764707, g: 0.427451, b: 0.011764707, a: 1}
+    colorIndex: 0
+    pixelCount: 10
+  - targetColor: {r: 0.93725497, g: 0, b: 0, a: 1}
+    colorIndex: 3
+    pixelCount: 30
