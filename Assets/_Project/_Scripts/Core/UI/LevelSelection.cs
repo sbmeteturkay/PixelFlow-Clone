@@ -1,5 +1,6 @@
     using System;
     using System.Collections.Generic;
+    using Game.Feature.Level;
     using PrimeTween;
     using TMPro;
     using UnityEngine;
@@ -16,8 +17,18 @@
         protected void Start()
         {
             UpdateLevelSelectionButtons();
+            LevelManager.Instance.OnLevelStart += OnLevelStart;
         }
 
+        private void OnDestroy()
+        {
+            LevelManager.Instance.OnLevelStart -= OnLevelStart;
+        }
+
+        private void OnLevelStart(int obj)
+        {
+            Hide();
+        }
 
         private void UpdateLevelSelectionButtons()
         {
@@ -27,7 +38,6 @@
             playButton.onClick.AddListener(() =>
             {
                 OnLevelSelected?.Invoke(currentLevel);
-                Hide();
             });
 
             for (int i = 0; i < levelButtonsText.Count; i++)
