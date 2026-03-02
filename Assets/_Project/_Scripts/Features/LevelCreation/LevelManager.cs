@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Splines;
 using System.Collections.Generic;
 using System.Linq;
+using Game.Core.Life;
 using Game.Feature.Shooting;
 
 namespace Game.Feature.Level
@@ -12,6 +13,7 @@ namespace Game.Feature.Level
         // ── Events ─────────────────────────────────────────────────────
         public Action OnWin;
         public Action OnLose;
+        public Action OnNoLives;
         public Action<int> OnLevelStart;
 
         // ── Inspector ─────────────────────────────────────────────────────
@@ -70,6 +72,11 @@ namespace Game.Feature.Level
 
         private void OnLevelSelected(int level)
         {
+            if (!LivesSystem.Instance.HasLives)
+            {
+                OnNoLives?.Invoke();
+                return;
+            }
             levelIndex = level-1;
             if (_levels != null)
                 StartLevel(_levels[levelIndex% _levels.Count]);
@@ -192,6 +199,7 @@ namespace Game.Feature.Level
         {
             if (!_levelActive) return;
             EndLevel();
+            LivesSystem.Instance.SpendLife();
             OnLose?.Invoke();
         }
 
@@ -201,6 +209,11 @@ namespace Game.Feature.Level
 
         public void RetryLevel()
         {
+            if (!LivesSystem.Instance.HasLives)
+            {
+                OnNoLives?.Invoke();
+                return;
+            }
             EndLevel();
 
             foreach (Shooter s in _shooters)

@@ -11,6 +11,7 @@ namespace Game.Feature.Shooting
 
         public const int SplineCapacity = 5;
         public const int SlotCapacity = 5;
+        public bool test = false;
 
         // ── Inspector ─────────────────────────────────────────────────────
 
@@ -103,6 +104,10 @@ namespace Game.Feature.Shooting
             _shootersOnSpline.Add(shooter);
 
             OnTrayListCountChanged?.Invoke(SplineCapacity - _trayOnShooters.Count);
+            if (test)
+            {
+                OnLose?.Invoke();
+            }
             return true;
         }
 
