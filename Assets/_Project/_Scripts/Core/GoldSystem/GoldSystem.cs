@@ -5,9 +5,6 @@ public class GoldSystem : MonoBehaviour
 {
     // ── Constants ─────────────────────────────────────────────────────
 
-    public const int LevelCompleteReward    = 40;
-    public const int LevelCompleteAdReward  = 80;
-    public const int ContinueCost          = 900;
 
     private const string KeyGold = "gold";
 
@@ -18,7 +15,6 @@ public class GoldSystem : MonoBehaviour
     // ── Properties ────────────────────────────────────────────────────
 
     public int CurrentGold { get; private set; }
-    public bool CanContinue => CurrentGold >= ContinueCost;
 
     // ── Events ────────────────────────────────────────────────────────
 
@@ -39,15 +35,9 @@ public class GoldSystem : MonoBehaviour
     // ═════════════════════════════════════════════════════════════════
 
     /// <summary>Called on level complete without ad.</summary>
-    public void RewardLevelComplete()
+    public void RewardLevelComplete(int amount)
     {
-        AddGold(LevelCompleteReward);
-    }
-
-    /// <summary>Called on level complete after watching an ad.</summary>
-    public void RewardLevelCompleteWithAd()
-    {
-        AddGold(LevelCompleteAdReward);
+        AddGold(amount);
     }
 
     public bool TrySpend(int amount)

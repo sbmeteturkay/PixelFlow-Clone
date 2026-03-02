@@ -1,4 +1,3 @@
-using System;
 using Game.Feature.Level;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,8 +6,6 @@ public class WinPanel : BasePanel
 {
     [SerializeField] private Button nextLevelButton;
     [SerializeField] private Button doubleRewardButton;
-
-
     protected override void Subscribe()   => LevelManager.Instance.OnWin += Show;
     protected override void Unsubscribe() => LevelManager.Instance.OnWin -= Show;
     protected override void Start()
@@ -17,12 +14,12 @@ public class WinPanel : BasePanel
         nextLevelButton.onClick.AddListener(()=>
         {
             LevelManager.Instance.NextLevel();
-            GoldSystem.Instance.RewardLevelComplete();
+            GoldSystem.Instance.RewardLevelComplete(40);
         });
         doubleRewardButton.onClick.AddListener(() =>
         {
             LevelManager.Instance.NextLevel();
-            GoldSystem.Instance.RewardLevelCompleteWithAd();
+            GoldSystem.Instance.RewardLevelComplete(80);
             Hide();
         });
     }
