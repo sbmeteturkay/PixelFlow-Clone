@@ -14,6 +14,7 @@ namespace Game.Feature.UI
         {
             LivesSystem.Instance.OnLivesChanged += OnLivesChanged;
             LivesSystem.Instance.OnTimerTick += OnTimerTick;
+            OnLivesChanged(LivesSystem.Instance.CurrentLives);
         }
         
         private void OnDestroy()

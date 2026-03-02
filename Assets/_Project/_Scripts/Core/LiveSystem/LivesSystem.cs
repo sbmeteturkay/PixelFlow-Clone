@@ -49,11 +49,6 @@ namespace Game.Core.Life
             ProcessOfflineRegen();
         }
 
-        private void Start()
-        {
-            OnLivesChanged?.Invoke(CurrentLives);
-        }
-
         private void Update()
         {
             if (CurrentLives >= MaxLives) return;
@@ -79,7 +74,6 @@ namespace Game.Core.Life
                 SetLastRegenTime(DateTime.UtcNow);
 
             Save();
-            OnLivesChanged?.Invoke(CurrentLives);
             return true;
         }
 
@@ -100,7 +94,6 @@ namespace Game.Core.Life
             CurrentLives = Mathf.Min(MaxLives, CurrentLives + gained);
             SetLastRegenTime(lastRegen.AddSeconds(gained * RegenIntervalSeconds));
             Save();
-            OnLivesChanged?.Invoke(CurrentLives);
         }
 
         private void OnTick()
@@ -123,7 +116,6 @@ namespace Game.Core.Life
                 CurrentLives = Mathf.Min(MaxLives, CurrentLives + gained);
                 SetLastRegenTime(lastRegen.AddSeconds(gained * RegenIntervalSeconds));
                 Save();
-                OnLivesChanged?.Invoke(CurrentLives);
             }
         }
 
@@ -135,6 +127,7 @@ namespace Game.Core.Life
         {
             PlayerPrefs.SetInt(KeyLives, CurrentLives);
             PlayerPrefs.Save();
+            OnLivesChanged?.Invoke(CurrentLives);
         }
 
         private void Load()
@@ -155,6 +148,12 @@ namespace Game.Core.Life
         {
             PlayerPrefs.SetString(KeyLastRegen, time.ToUniversalTime().ToString("O"));
             PlayerPrefs.Save();
+        }
+
+        public void FillLives()
+        {
+            CurrentLives = MaxLives;
+            Save();
         }
     }
 }
