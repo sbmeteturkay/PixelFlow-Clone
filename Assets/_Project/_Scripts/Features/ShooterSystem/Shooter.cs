@@ -92,9 +92,7 @@ namespace Game.Feature.Shooting
 
         private void ApplyColor(Color color)
         {
-            _meshRenderer.GetPropertyBlock(_mpb);
-            _mpb.SetColor(BaseColorID, color);
-            _meshRenderer.SetPropertyBlock(_mpb);
+            _meshRenderer.material.SetColor(BaseColorID, color);
         }
 
         public void SetSpline(SplineContainer spline)

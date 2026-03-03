@@ -12,6 +12,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _RECEIVE_SHADOWS_OFF
   - _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -22,6 +23,7 @@ Material:
     RenderType: Opaque
   disabledShaderPasses:
   - MOTIONVECTORS
+  - XRMotionVectors
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -154,7 +156,7 @@ Material:
     - _RampSmoothing: 0.166
     - _RampThreshold: 1
     - _RampType: 2
-    - _ReceiveShadows: 1
+    - _ReceiveShadows: 0
     - _ReceiveShadowsOff: 0
     - _ReflectionMapType: 0
     - _ReflectionSmoothness: 0.5
@@ -199,7 +201,7 @@ Material:
     - _UseShadowTexture: 0
     - _UseSpecular: 0
     - _WorkflowMode: 1
-    - _XRMotionVectorsPass: 1
+    - _XRMotionVectorsPass: 0
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 0.47058827, g: 0.57254905, b: 0.72156864, a: 1}
