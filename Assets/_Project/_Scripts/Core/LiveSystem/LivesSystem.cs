@@ -155,5 +155,10 @@ namespace Game.Core.Life
             CurrentLives = MaxLives;
             Save();
         }
+        public void AddLife()
+        {
+            CurrentLives = Mathf.Min(CurrentLives+1, MaxLives);
+            Save();
+        }
     }
 }

@@ -18,13 +18,21 @@
         {
             UpdateLevelSelectionButtons();
             LevelManager.Instance.OnLevelStart += OnLevelStart;
+            LevelManager.Instance.OnNoLives += OnNoLives;
         }
+
+
 
         private void OnDestroy()
         {
             LevelManager.Instance.OnLevelStart -= OnLevelStart;
-        }
+            LevelManager.Instance.OnNoLives -= OnNoLives;
 
+        }
+        private void OnNoLives()
+        {
+            Show();
+        }
         private void OnLevelStart(int obj)
         {
             Hide();

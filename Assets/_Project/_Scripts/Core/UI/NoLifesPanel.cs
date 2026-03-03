@@ -18,6 +18,14 @@ public class NoLivesPanel : BasePanel
     {
         base.Start();
         buyLivesButton.OnBought += OnLifeBought;
+        watchAdButton.onClick.AddListener(WatchAd);
+    }
+
+    private void WatchAd()
+    {
+        //todo: ads integration
+        LivesSystem.Instance.AddLife();
+        Hide();
     }
 
     private void OnLifeBought()
