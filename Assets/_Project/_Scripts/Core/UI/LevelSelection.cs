@@ -14,6 +14,17 @@
         [SerializeField] private List<TMP_Text> levelButtonsText = new List<TMP_Text>();
         [SerializeField] private Button playButton;
 
+        // ── Singleton ─────────────────────────────────────────────────────
+        public static LevelSelection Instance { get; private set; }
+
+        // ─────────────────────────────────────────────────────────────────
+
+        private void Awake()
+        {
+            if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+            Instance = this;
+        }
+        
         protected void Start()
         {
             UpdateLevelSelectionButtons();
@@ -54,7 +65,8 @@
                 levelButton.text = (currentLevel+i).ToString();
             }
         }
-        private void Show()
+
+        public void Show()
         {
             Tween.Alpha(canvasGroup, 1f, 0.3f);
             canvasGroup.blocksRaycasts = true;

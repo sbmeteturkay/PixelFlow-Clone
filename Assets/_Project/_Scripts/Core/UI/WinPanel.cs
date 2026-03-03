@@ -15,6 +15,7 @@ public class WinPanel : BasePanel
         {
             LevelManager.Instance.NextLevel();
             GoldSystem.Instance.RewardLevelComplete(40);
+            Hide();
         });
         doubleRewardButton.onClick.AddListener(() =>
         {

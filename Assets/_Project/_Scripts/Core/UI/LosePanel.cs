@@ -1,4 +1,3 @@
-using System;
 using Game.Feature.Level;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,8 +5,6 @@ using UnityEngine.UI;
 public class LosePanel : BasePanel
 {
     [SerializeField] Button restartButton;
-
-
 
     protected override void Subscribe()   => LevelManager.Instance.OnLose += Show;
     protected override void Unsubscribe() => LevelManager.Instance.OnLose -= Show;
@@ -20,5 +17,6 @@ public class LosePanel : BasePanel
             LevelManager.Instance.RetryLevel();
             Hide();
         });
+        closeButton.onClick.AddListener(()=>LevelSelection.Instance.Show());
     }
 }
