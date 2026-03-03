@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5029050673090776549}
   - component: {fileID: 6769888785505781829}
   - component: {fileID: 8581529260576616583}
+  - component: {fileID: 121583572817777689}
   m_Layer: 0
   m_Name: Tray
   m_TagString: Untagged
@@ -90,3 +91,15 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &121583572817777689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178918142537695561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fc7fab1c5d645068a1436c378f072d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Feature.Shooting.Tray

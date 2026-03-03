@@ -518,11 +518,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1178918142537695561, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
       propertyPath: m_Name
-      value: Tray (5)
+      value: Tray
       objectReference: {fileID: 0}
     - target: {fileID: 5029050673090776549, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.1138405
       objectReference: {fileID: 0}
     - target: {fileID: 5029050673090776549, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -569,6 +569,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
+--- !u!114 &95081659 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 121583572817777689, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
+  m_PrefabInstance: {fileID: 95081658}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fc7fab1c5d645068a1436c378f072d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Feature.Shooting.Tray
 --- !u!1 &95104112
 GameObject:
   m_ObjectHideFlags: 0
@@ -3213,11 +3224,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1178918142537695561, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
       propertyPath: m_Name
-      value: Tray (5)
+      value: Tray
       objectReference: {fileID: 0}
     - target: {fileID: 5029050673090776549, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.1138405
       objectReference: {fileID: 0}
     - target: {fileID: 5029050673090776549, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3264,6 +3275,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
+--- !u!114 &485907122 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 121583572817777689, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
+  m_PrefabInstance: {fileID: 485907121}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fc7fab1c5d645068a1436c378f072d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Feature.Shooting.Tray
 --- !u!1 &501395128
 GameObject:
   m_ObjectHideFlags: 0
@@ -7077,11 +7099,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1178918142537695561, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
       propertyPath: m_Name
-      value: Tray (5)
+      value: Tray
       objectReference: {fileID: 0}
     - target: {fileID: 5029050673090776549, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.1138405
       objectReference: {fileID: 0}
     - target: {fileID: 5029050673090776549, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7128,6 +7150,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
+--- !u!114 &864658441 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 121583572817777689, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
+  m_PrefabInstance: {fileID: 864658440}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fc7fab1c5d645068a1436c378f072d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Feature.Shooting.Tray
 --- !u!1 &867361278
 GameObject:
   m_ObjectHideFlags: 0
@@ -11132,11 +11165,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1178918142537695561, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
       propertyPath: m_Name
-      value: Tray (5)
+      value: Tray
       objectReference: {fileID: 0}
     - target: {fileID: 5029050673090776549, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.1138405
       objectReference: {fileID: 0}
     - target: {fileID: 5029050673090776549, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11183,6 +11216,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
+--- !u!114 &1374635874 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 121583572817777689, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
+  m_PrefabInstance: {fileID: 1374635873}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fc7fab1c5d645068a1436c378f072d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Feature.Shooting.Tray
 --- !u!1 &1374996753
 GameObject:
   m_ObjectHideFlags: 0
@@ -15490,12 +15534,12 @@ MonoBehaviour:
   - {fileID: 650183721}
   - {fileID: 1028973210}
   - {fileID: 2003239028}
-  trayParentTransforms:
-  - {fileID: 5359589277033636992}
-  - {fileID: 3553207742859006056}
-  - {fileID: 2525357176530866107}
-  - {fileID: 5006423771035526018}
-  - {fileID: 5565693707763582440}
+  _trays:
+  - {fileID: 1374635874}
+  - {fileID: 2145565183}
+  - {fileID: 864658441}
+  - {fileID: 95081659}
+  - {fileID: 485907122}
   shooterMovementSpeed: 5
 --- !u!1001 &1936298986
 PrefabInstance:
@@ -17133,11 +17177,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1178918142537695561, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
       propertyPath: m_Name
-      value: Tray (5)
+      value: Tray
       objectReference: {fileID: 0}
     - target: {fileID: 5029050673090776549, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.1138405
       objectReference: {fileID: 0}
     - target: {fileID: 5029050673090776549, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -17184,6 +17228,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
+--- !u!114 &2145565183 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 121583572817777689, guid: b9fb1bd49a528f54b84e122621d1ca8a, type: 3}
+  m_PrefabInstance: {fileID: 2145565182}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7fc7fab1c5d645068a1436c378f072d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Feature.Shooting.Tray
 --- !u!1001 &328713854277400484
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17276,8 +17331,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5006423771035526018}
+  - component: {fileID: 5006423771035526019}
   m_Layer: 0
-  m_Name: Tray (1)
+  m_Name: TrayPositionCarrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17353,8 +17409,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5565693707763582440}
+  - component: {fileID: 5565693707763582441}
   m_Layer: 0
-  m_Name: Tray
+  m_Name: TrayPositionCarrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17489,8 +17546,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5359589277033636992}
+  - component: {fileID: 5359589277033636993}
   m_Layer: 0
-  m_Name: Tray (4)
+  m_Name: TrayPositionCarrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17506,7 +17564,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.70710576, w: 0.70710784}
   m_LocalPosition: {x: -0.01, y: 0.846, z: -0.42}
-  m_LocalScale: {x: 1, y: 0.11384045, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1941804680}
@@ -17522,7 +17580,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.70710576, w: 0.70710784}
   m_LocalPosition: {x: 0.161, y: 0.846, z: -0.42}
-  m_LocalScale: {x: 1, y: 0.11384045, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 84334757}
@@ -17538,12 +17596,25 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.70710576, w: 0.70710784}
   m_LocalPosition: {x: -0.18, y: 0.846, z: -0.42}
-  m_LocalScale: {x: 1, y: 0.11384045, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1861989358}
   m_Father: {fileID: 1211110858}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+--- !u!114 &5006423771035526019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1219629810790051630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f651350cd0cc4b7595d3f0a8491154c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Feature.Shooting.TrayContainer
+  currentTray: {fileID: 2145565183}
 --- !u!4 &5359589277033636992
 Transform:
   m_ObjectHideFlags: 0
@@ -17554,12 +17625,25 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.5674051, w: 0.8234389}
   m_LocalPosition: {x: 0.475, y: 0.846, z: -0.42}
-  m_LocalScale: {x: 1, y: 0.11384045, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1578018753}
   m_Father: {fileID: 1211110858}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -69.139}
+--- !u!114 &5359589277033636993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2303462780376705068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f651350cd0cc4b7595d3f0a8491154c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Feature.Shooting.TrayContainer
+  currentTray: {fileID: 485907122}
 --- !u!4 &5565693707763582440
 Transform:
   m_ObjectHideFlags: 0
@@ -17570,12 +17654,25 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.70710576, w: 0.70710784}
   m_LocalPosition: {x: -0.35, y: 0.846, z: -0.42}
-  m_LocalScale: {x: 1, y: 0.11384045, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1172318550}
   m_Father: {fileID: 1211110858}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+--- !u!114 &5565693707763582441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777740756230523204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f651350cd0cc4b7595d3f0a8491154c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Feature.Shooting.TrayContainer
+  currentTray: {fileID: 1374635874}
 --- !u!114 &6228640798975840639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17615,13 +17712,27 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3553207742859006056}
+  - component: {fileID: 7266868752807730373}
   m_Layer: 0
-  m_Name: Tray (3)
+  m_Name: TrayPositionCarrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &7266868752807730373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7266868752807730372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f651350cd0cc4b7595d3f0a8491154c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Feature.Shooting.TrayContainer
+  currentTray: {fileID: 95081659}
 --- !u!222 &7680878976972974815
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17721,13 +17832,27 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2525357176530866107}
+  - component: {fileID: 8547062176913933080}
   m_Layer: 0
-  m_Name: Tray (2)
+  m_Name: TrayPositionCarrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8547062176913933080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8547062176913933079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f651350cd0cc4b7595d3f0a8491154c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Game.Feature.Shooting.TrayContainer
+  currentTray: {fileID: 864658441}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

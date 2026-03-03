@@ -3,6 +3,7 @@ using Game.Feature.Level;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Splines;
 
 namespace Game.Feature.Shooting
@@ -28,6 +29,9 @@ namespace Game.Feature.Shooting
 
         [Header("UI")]
         [SerializeField] private TextMeshPro pixelCountLabel;
+
+        public UnityEvent OnSplineMove;
+        public UnityEvent OnSplineExit;
 
         private readonly float moveToSlotSpeed = 16f;
         private Color _baseColor;
@@ -144,7 +148,11 @@ namespace Game.Feature.Shooting
                     break;
 
                 case State.Slotted:
+                    OnSplineExit.Invoke();
                     EnterSlotMove();
+                    break;
+                case State.Waiting:
+                    OnSplineExit.Invoke();
                     break;
             }
         }
@@ -227,6 +235,7 @@ namespace Game.Feature.Shooting
                             pixelCountLabel.transform.LookAt(transform.position + mainCamTransform.forward,
                                 mainCamTransform.up);
                             SweepAndFire();
+                            OnSplineMove.Invoke();
                         },
                         Ease.Linear))
                     .OnComplete(FinishSpline));
@@ -315,10 +324,10 @@ namespace Game.Feature.Shooting
         // Pool
         // ═════════════════════════════════════════════════════════════════
 
-        public void ReturnToPool()
+        private void ReturnToPool()
         {
             StopAllProcesses();
-
+            OnSplineExit.Invoke();
             if (CurrentState == State.OnSpline)
                 ShooterManager.Instance.ExitSpline(this);
             else if (CurrentState == State.Slotted)
@@ -331,8 +340,7 @@ namespace Game.Feature.Shooting
                             0.1f,
                             Ease.Linear, cycleMode: CycleMode.Incremental, cycles: 8)
                         .Group(
-                            Tween.Position(transform, transform.position + Vector3.forward * 2, .5f,
-                                Ease.InBack)))
+                            Tween.Position(transform, transform.position + Vector3.forward * 4, .5f)))
                 .Group(
                     Tween.Scale(transform, Vector3.zero, .5f, Ease.InBack).OnComplete(() =>
                     {
