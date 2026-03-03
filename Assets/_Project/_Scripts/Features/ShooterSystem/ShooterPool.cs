@@ -1,4 +1,3 @@
-using Game.Feature.Shooting;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -16,6 +15,7 @@ namespace Game.Feature.Shooting
 
         // ── Singleton ─────────────────────────────────────────────────────
         public static ShooterPool Instance { get; private set; }
+        Transform mainCamTransform;
 
         // ─────────────────────────────────────────────────────────────────
 
@@ -38,6 +38,7 @@ namespace Game.Feature.Shooting
                 defaultCapacity: defaultCapacity,
                 maxSize: maxSize
             );
+            mainCamTransform = Camera.main.transform;
         }
 
         // ═════════════════════════════════════════════════════════════════
@@ -49,12 +50,12 @@ namespace Game.Feature.Shooting
         {
             Shooter shooter = _pool.Get();
             shooter.transform.position = position;
-            shooter.Initialize(data);
+            shooter.Initialize(data,mainCamTransform);
             return shooter;
         }
 
         /// <summary>Return a shooter to the pool.</summary>
-        public void Release(Shooter shooter)
+        private void Release(Shooter shooter)
         {
             _pool.Release(shooter);
         }

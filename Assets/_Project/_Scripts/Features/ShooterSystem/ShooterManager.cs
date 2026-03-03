@@ -1,7 +1,8 @@
-using UnityEngine;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PrimeTween;
+using UnityEngine;
 
 namespace Game.Feature.Shooting
 {
@@ -11,7 +12,7 @@ namespace Game.Feature.Shooting
 
         public const int SplineCapacity = 5;
         public const int SlotCapacity = 5;
-        public bool test = false;
+        public bool test;
 
         // ── Inspector ─────────────────────────────────────────────────────
 
@@ -22,6 +23,21 @@ namespace Game.Feature.Shooting
 
         [Header("Settings")]
         [SerializeField] private float shooterMovementSpeed = 3f;
+
+        private readonly List<Transform> _emptyTrayContainerList = new();
+        private readonly List<Shooter> _shootersInSlot = new();
+
+        // ── Runtime ───────────────────────────────────────────────────────
+
+        private readonly List<Shooter> _shootersOnSpline = new();
+
+        private readonly List<Transform> _trayList = new();
+        private readonly Dictionary<Shooter, Transform> _trayOnShooters = new();
+
+        // ── Events ────────────────────────────────────────────────────────
+
+        public Action OnLose;
+        public Action<int> OnTrayListCountChanged;
 
         // ── Singleton ─────────────────────────────────────────────────────
 
@@ -34,20 +50,6 @@ namespace Game.Feature.Shooting
         public bool IsSlotFull => _shootersInSlot.Count >= SlotCapacity;
         public int SplineCount => _shootersOnSpline.Count;
         public int SlotCount => _shootersInSlot.Count;
-
-        // ── Events ────────────────────────────────────────────────────────
-
-        public System.Action OnLose;
-        public System.Action<int> OnTrayListCountChanged;
-
-        // ── Runtime ───────────────────────────────────────────────────────
-
-        private readonly List<Shooter> _shootersOnSpline = new();
-        private readonly List<Shooter> _shootersInSlot = new();
-        private readonly Dictionary<Shooter, Transform> _trayOnShooters = new();
-
-        private readonly List<Transform> _trayList = new();
-        private readonly List<Transform> _emptyTrayContainerList = new();
 
         // ─────────────────────────────────────────────────────────────────
 
@@ -63,8 +65,10 @@ namespace Game.Feature.Shooting
 
             if (trayParentTransforms != null)
                 foreach (Transform t in trayParentTransforms)
+                {
                     if (t != null)
                         _trayList.Add(t);
+                }
         }
 
         // ═════════════════════════════════════════════════════════════════
@@ -92,7 +96,7 @@ namespace Game.Feature.Shooting
             tray.parent = null;
 
             Vector3 splineStart = shooter.GetSpline() != null
-                ? (Vector3)shooter.GetSpline().EvaluatePosition(0)
+                ? shooter.GetSpline().EvaluatePosition(0)
                 : shooter.transform.position;
 
             Sequence.Create()
@@ -108,6 +112,7 @@ namespace Game.Feature.Shooting
             {
                 OnLose?.Invoke();
             }
+
             return true;
         }
 
@@ -202,9 +207,72 @@ namespace Game.Feature.Shooting
 
         public void ClearShooters()
         {
+            ResetTrays();
             _shootersInSlot.Clear();
             _shootersOnSpline.Clear();
             _trayOnShooters.Clear();
+        }
+
+        private void ResetTrays()
+        {
+            // Stop tweens only on tray transforms, not the whole scene
+            foreach (KeyValuePair<Shooter, Transform> kv in _trayOnShooters)
+            {
+                Transform tray = kv.Value;
+                if (tray != null)
+                    Tween.StopAll(tray);
+            }
+
+            // Also stop tweens on any tray that finished and reparented
+            foreach (Transform trayCarrier in trayParentTransforms)
+            {
+                if (trayCarrier == null) continue;
+                for (int i = 0; i < trayCarrier.childCount; i++)
+                {
+                    Tween.StopAll(trayCarrier.GetChild(i));
+                }
+            }
+
+            // Reparent all trays back to their carriers and reset transforms
+            // Pair: each trayCarrier should have exactly one tray child
+            // Floating trays (parent=null) need to be matched back
+            List<Transform> floatingTrays = new();
+            foreach (KeyValuePair<Shooter, Transform> kv in _trayOnShooters)
+            {
+                if (kv.Value != null && kv.Value.parent == null)
+                    floatingTrays.Add(kv.Value);
+            }
+
+            // Find carriers without children and assign floating trays
+            int floatIndex = 0;
+            foreach (Transform carrier in trayParentTransforms)
+            {
+                if (carrier == null) continue;
+                if (carrier.childCount == 0 && floatIndex < floatingTrays.Count)
+                {
+                    Transform tray = floatingTrays[floatIndex++];
+                    tray.parent = carrier;
+                }
+
+                // Reset all children
+                for (int i = 0; i < carrier.childCount; i++)
+                {
+                    Transform tray = carrier.GetChild(i);
+                    tray.localPosition = Vector3.zero;
+                    tray.localRotation = Quaternion.identity;
+                    tray.localScale = Vector3.one;
+                }
+            }
+
+            // Rebuild lists
+            _trayList.Clear();
+            _emptyTrayContainerList.Clear();
+            _trayOnShooters.Clear();
+
+            foreach (Transform t in trayParentTransforms)
+            {
+                if (t != null) _trayList.Add(t);
+            }
         }
     }
 }

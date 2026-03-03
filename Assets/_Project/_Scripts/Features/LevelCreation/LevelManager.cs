@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Game.Core.Life;
 using Game.Feature.Shooting;
+using PrimeTween;
 
 namespace Game.Feature.Level
 {
@@ -35,7 +36,6 @@ namespace Game.Feature.Level
 
         // ── Runtime ───────────────────────────────────────────────────────
         private List<LevelData> _levels=new();
-        private List<Shooter> _waitingShooters = new();
         private List<Shooter> _shooters = new();
         private Queue<Shooter>[] _columnQueues;
         private bool _levelActive = false;
@@ -46,8 +46,7 @@ namespace Game.Feature.Level
 
         private void Awake()
         {
-            Application.targetFrameRate = 60;
-            QualitySettings.vSyncCount = 0;
+
             if (Instance != null && Instance != this)
             {
                 Destroy(gameObject);
@@ -114,8 +113,6 @@ namespace Game.Feature.Level
 
         private void SpawnShooters(List<ShooterData> shooterDataList)
         {
-            _waitingShooters.Clear();
-
             _columnQueues = new Queue<Shooter>[COLUMN_COUNT];
             for (int i = 0; i < COLUMN_COUNT; i++)
                 _columnQueues[i] = new Queue<Shooter>();
@@ -133,7 +130,6 @@ namespace Game.Feature.Level
 
                 _shooters.Add(shooter);
                 _columnQueues[col].Enqueue(shooter);
-                _waitingShooters.Add(shooter);
             }
         }
 
@@ -157,7 +153,6 @@ namespace Game.Feature.Level
             if (col == -1) return;
 
             _columnQueues[col].Dequeue();
-            _waitingShooters.Remove(shooter);
 
             // Shift remaining shooters in this column forward and promote front
             int rowIndex = 0;
@@ -181,7 +176,7 @@ namespace Game.Feature.Level
             return waitingAreaRoot.position
                    + Vector3.right * xOffset
                    + Vector3.forward * zOffset
-                   + Vector3.up;
+                   + Vector3.up*.25f;
         }
 
         // ═════════════════════════════════════════════════════════════════
@@ -211,18 +206,19 @@ namespace Game.Feature.Level
 
         public void RetryLevel()
         {
-            if (!LivesSystem.Instance.HasLives)
-            {
-                OnNoLives?.Invoke();
-                return;
-            }
+
             EndLevel();
 
             foreach (Shooter s in _shooters)
                 s.ResetShooter();
 
-            _waitingShooters.Clear();
             ShooterManager.Instance.ClearShooters();
+            
+            if (!LivesSystem.Instance.HasLives)
+            {
+                OnNoLives?.Invoke();
+                return;
+            }
             pixelGrid.ResetLevel();
             StartLevel(_levels[levelIndex% _levels.Count]);
         }

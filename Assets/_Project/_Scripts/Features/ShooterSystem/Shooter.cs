@@ -1,9 +1,9 @@
-using UnityEngine;
-using UnityEngine.Splines;
-using TMPro;
-using PrimeTween;
 using System;
 using Game.Feature.Level;
+using PrimeTween;
+using TMPro;
+using UnityEngine;
+using UnityEngine.Splines;
 
 namespace Game.Feature.Shooting
 {
@@ -18,8 +18,7 @@ namespace Game.Feature.Shooting
             Slotted
         }
 
-        private State _state;
-        public State CurrentState => _state;
+        private static readonly int BaseColorID = Shader.PropertyToID("_BaseColor");
 
         // ── Inspector ─────────────────────────────────────────────────────
 
@@ -30,31 +29,35 @@ namespace Game.Feature.Shooting
         [Header("UI")]
         [SerializeField] private TextMeshPro pixelCountLabel;
 
-        // ── Runtime ───────────────────────────────────────────────────────
+        private readonly float moveToSlotSpeed = 16f;
+        private Color _baseColor;
 
-        private SplineContainer splineContainer;
-        private int ColorIndex { get; set; }
+        private Sequence _currentSequence;
 
         private bool _interactable;
+
+        private MaterialPropertyBlock _mpb;
+        private GridEdge _prevEdge;
+
+        private int _prevLineIndex = -1;
 
         private int _remainingPixels;
         private Transform _slotTargetTransform;
 
-        private Sequence _currentSequence;
+        private Vector3 defaultScale;
 
-        private int _prevLineIndex = -1;
-        private GridEdge _prevEdge;
+        private Transform mainCamTransform;
 
         public Action<Shooter> OnRequestRelease;
 
+        // ── Runtime ───────────────────────────────────────────────────────
+
+        private SplineContainer splineContainer;
+
         private float splineMovementSpeed;
-        private readonly float moveToSlotSpeed = 16f;
+        public State CurrentState { get; private set; }
 
-        private MaterialPropertyBlock _mpb;
-        private Color _baseColor;
-        private Vector3 defaultScale;
-
-        private static readonly int BaseColorID = Shader.PropertyToID("_BaseColor");
+        private int ColorIndex { get; set; }
 
         // ═════════════════════════════════════════════════════════════════
         // Lifecycle
@@ -62,7 +65,7 @@ namespace Game.Feature.Shooting
 
         private void Awake()
         {
-            _mpb = new MaterialPropertyBlock();
+            _mpb = new();
             defaultScale = transform.localScale;
         }
 
@@ -70,13 +73,26 @@ namespace Game.Feature.Shooting
         {
             StopAllProcesses();
         }
+        // ═════════════════════════════════════════════════════════════════
+        // Input
+        // ═════════════════════════════════════════════════════════════════
+
+        private void OnMouseDown()
+        {
+            if (!_interactable)
+                return;
+            Tween.PunchScale(transform, Vector3.one * .5f, .1f);
+            if (CurrentState == State.Waiting || CurrentState == State.Slotted)
+                TryLaunchToSpline();
+        }
 
         // ═════════════════════════════════════════════════════════════════
         // Initialization (Pool)
         // ═════════════════════════════════════════════════════════════════
 
-        public void Initialize(ShooterData data)
+        public void Initialize(ShooterData data, Transform mainCam)
         {
+            mainCamTransform = mainCam;
             transform.localScale = defaultScale;
             ColorIndex = data.colorIndex;
             _remainingPixels = data.pixelCount;
@@ -104,18 +120,6 @@ namespace Game.Feature.Shooting
         {
             return splineContainer;
         }
-        // ═════════════════════════════════════════════════════════════════
-        // Input
-        // ═════════════════════════════════════════════════════════════════
-
-        private void OnMouseDown()
-        {
-            if (!_interactable)
-                return;
-            Tween.PunchScale(transform, Vector3.one * .5f, .1f);
-            if (_state == State.Waiting || _state == State.Slotted)
-                TryLaunchToSpline();
-        }
 
         // ═════════════════════════════════════════════════════════════════
         // State Management
@@ -123,9 +127,9 @@ namespace Game.Feature.Shooting
 
         private void SetState(State newState)
         {
-            if (_state == newState) return;
+            if (CurrentState == newState) return;
 
-            _state = newState;
+            CurrentState = newState;
             OnStateChanged(newState);
         }
 
@@ -159,7 +163,7 @@ namespace Game.Feature.Shooting
             if (!ShooterManager.Instance.TryEnterSpline(this))
                 return;
 
-            if (_state == State.Slotted)
+            if (CurrentState == State.Slotted)
                 ShooterManager.Instance.ExitSlot(this);
 
             LevelManager.Instance.OnShooterLeftWaiting(this);
@@ -192,18 +196,20 @@ namespace Game.Feature.Shooting
             float duration = splineLength / splineMovementSpeed;
 
             _prevEdge = PixelGrid.Instance.GetEdgeForPosition(
-                (Vector3)splineContainer.EvaluatePosition(0));
+                splineContainer.EvaluatePosition(0));
             _prevLineIndex = GetCurrentLineIndex(_prevEdge);
-            
+
             _currentSequence = Sequence.Create()
                 .Group(transform.JumpTo(splineContainer.EvaluatePosition(0), 2, .4f))
                 .Group(Tween.Rotation(transform, (Vector3)splineContainer.EvaluateTangent(0) + Vector3.up * 90, .4f,
-                        ease: Ease.InBack))
+                        Ease.InBack).OnUpdate(this, (_, _) => pixelCountLabel.transform.LookAt(
+                        transform.position + mainCamTransform.forward,
+                        mainCamTransform.up))
                     .Chain(Tween.Custom(
                         0f,
                         splineLength,
                         duration,
-                        onValueChange: distance =>
+                        distance =>
                         {
                             float normalized = distance / splineLength;
 
@@ -218,10 +224,12 @@ namespace Game.Feature.Shooting
                                                      Quaternion.Euler(0f, 90f, 0f);
                             }
 
+                            pixelCountLabel.transform.LookAt(transform.position + mainCamTransform.forward,
+                                mainCamTransform.up);
                             SweepAndFire();
                         },
-                        ease: Ease.Linear))
-                    .OnComplete(FinishSpline);
+                        Ease.Linear))
+                    .OnComplete(FinishSpline));
         }
 
         // ═════════════════════════════════════════════════════════════════
@@ -254,7 +262,9 @@ namespace Game.Feature.Shooting
 
             int step = currentLineIndex > _prevLineIndex ? 1 : -1;
             for (int line = _prevLineIndex + step; line != currentLineIndex + step; line += step)
+            {
                 TryFireAtLine(currentEdge, line);
+            }
 
             _prevLineIndex = currentLineIndex;
         }
@@ -268,7 +278,7 @@ namespace Game.Feature.Shooting
                 RegisterHit();
                 Tween.PunchScale(_meshRenderer.gameObject.transform, Vector3.one * .5f, .1f);
                 BulletPool.Instance.Fire(transform.position + transform.TransformDirection(_shootOffset),
-                    transform.forward, target, ColorIndex, 10);
+                    transform.forward, target, ColorIndex, 15);
             }
         }
 
@@ -292,7 +302,12 @@ namespace Game.Feature.Shooting
 
             Sequence.Create()
                 .Group(transform.JumpTo(_slotTargetTransform.position, 2, duration)
-                    .OnComplete(() => { transform.position = _slotTargetTransform.position; })
+                    .OnComplete(() =>
+                    {
+                        transform.position = _slotTargetTransform.position;
+                        pixelCountLabel.transform.LookAt(transform.position + mainCamTransform.forward,
+                            mainCamTransform.up);
+                    })
                     .Group(Tween.Rotation(transform, _slotTargetTransform.rotation.eulerAngles, duration)));
         }
 
@@ -304,9 +319,9 @@ namespace Game.Feature.Shooting
         {
             StopAllProcesses();
 
-            if (_state == State.OnSpline)
+            if (CurrentState == State.OnSpline)
                 ShooterManager.Instance.ExitSpline(this);
-            else if (_state == State.Slotted)
+            else if (CurrentState == State.Slotted)
                 ShooterManager.Instance.ExitSlot(this);
             Sequence.Create()
                 .Group(
@@ -317,9 +332,9 @@ namespace Game.Feature.Shooting
                             Ease.Linear, cycleMode: CycleMode.Incremental, cycles: 8)
                         .Group(
                             Tween.Position(transform, transform.position + Vector3.forward * 2, .5f,
-                                ease: Ease.InBack)))
+                                Ease.InBack)))
                 .Group(
-                    Tween.Scale(transform, Vector3.zero, .5f, ease: Ease.InBack).OnComplete(() =>
+                    Tween.Scale(transform, Vector3.zero, .5f, Ease.InBack).OnComplete(() =>
                     {
                         OnRequestRelease?.Invoke(this);
                     })
@@ -365,6 +380,8 @@ namespace Game.Feature.Shooting
         {
             if (pixelCountLabel != null)
                 pixelCountLabel.text = _remainingPixels.ToString();
+            pixelCountLabel.transform.LookAt(transform.position + mainCamTransform.forward,
+                mainCamTransform.up);
         }
 
         public void MoveTo(Vector3 getWaitingPosition)
