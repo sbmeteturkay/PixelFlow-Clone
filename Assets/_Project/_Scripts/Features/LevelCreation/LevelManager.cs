@@ -1,21 +1,17 @@
 using System;
-using UnityEngine;
-using UnityEngine.Splines;
 using System.Collections.Generic;
 using System.Linq;
+using Game.Core;
 using Game.Core.Life;
 using Game.Feature.Shooting;
-using PrimeTween;
+using UnityEngine;
+using UnityEngine.Splines;
 
 namespace Game.Feature.Level
 {
     public class LevelManager : MonoBehaviour
     {
-        // ── Events ─────────────────────────────────────────────────────
-        public Action OnWin;
-        public Action OnLose;
-        public Action OnNoLives;
-        public Action<int> OnLevelStart;
+        private const int COLUMN_COUNT = 3;
 
         // ── Inspector ─────────────────────────────────────────────────────
 
@@ -30,23 +26,27 @@ namespace Game.Feature.Level
         [SerializeField] private Transform waitingAreaRoot;
 
         [SerializeField] private float waitingSpacing = 1.5f;
+        private readonly List<Shooter> _shooters = new();
+        private Queue<Shooter>[] _columnQueues;
+        private bool _levelActive;
+
+        // ── Runtime ───────────────────────────────────────────────────────
+        private List<LevelData> _levels = new();
+        public Action<int> OnLevelStart;
+        public Action OnLose;
+
+        public Action OnNoLives;
+
+        // ── Events ─────────────────────────────────────────────────────
+        public Action OnWin;
 
         // ── Singleton ─────────────────────────────────────────────────────
         public static LevelManager Instance { get; private set; }
-
-        // ── Runtime ───────────────────────────────────────────────────────
-        private List<LevelData> _levels=new();
-        private List<Shooter> _shooters = new();
-        private Queue<Shooter>[] _columnQueues;
-        private bool _levelActive = false;
-
-        private const int COLUMN_COUNT = 3;
 
         // ─────────────────────────────────────────────────────────────────
 
         private void Awake()
         {
-
             if (Instance != null && Instance != this)
             {
                 Destroy(gameObject);
@@ -61,14 +61,16 @@ namespace Game.Feature.Level
             LevelSelection.OnLevelSelected += OnLevelSelected;
             LoadLevels();
         }
+
+        private void OnDestroy()
+        {
+            LevelSelection.OnLevelSelected -= OnLevelSelected;
+        }
+
         private void LoadLevels()
         {
             _levels = Resources.LoadAll<LevelData>("LevelData").ToList();
             _levels = _levels.OrderBy(l => l.name).ToList();
-        }
-        private void OnDestroy()
-        {
-            LevelSelection.OnLevelSelected -= OnLevelSelected;
         }
 
         private void OnLevelSelected(int level)
@@ -78,9 +80,10 @@ namespace Game.Feature.Level
                 OnNoLives?.Invoke();
                 return;
             }
-            levelIndex = level-1;
+
+            levelIndex = level - 1;
             if (_levels != null)
-                StartLevel(_levels[levelIndex% _levels.Count]);
+                StartLevel(_levels[levelIndex % _levels.Count]);
         }
 
 
@@ -97,7 +100,7 @@ namespace Game.Feature.Level
             ShooterManager.Instance.OnLose += HandleLose;
 
             SpawnShooters(data.shooters);
-            OnLevelStart(levelIndex+1);
+            OnLevelStart(levelIndex + 1);
         }
 
         private void EndLevel()
@@ -115,8 +118,10 @@ namespace Game.Feature.Level
         {
             _columnQueues = new Queue<Shooter>[COLUMN_COUNT];
             for (int i = 0; i < COLUMN_COUNT; i++)
-                _columnQueues[i] = new Queue<Shooter>();
-            
+            {
+                _columnQueues[i] = new();
+            }
+
 
             for (int i = 0; i < shooterDataList.Count; i++)
             {
@@ -176,7 +181,7 @@ namespace Game.Feature.Level
             return waitingAreaRoot.position
                    + Vector3.right * xOffset
                    + Vector3.forward * zOffset
-                   + Vector3.up*.25f;
+                   + Vector3.up * .25f;
         }
 
         // ═════════════════════════════════════════════════════════════════
@@ -190,6 +195,7 @@ namespace Game.Feature.Level
             PlayerPrefs.SetInt("CurrentLevel", levelIndex + 2);
             PlayerPrefs.Save();
             OnWin?.Invoke();
+            AudioManager.Instance.PlayWin();
         }
 
         private void HandleLose()
@@ -198,6 +204,7 @@ namespace Game.Feature.Level
             EndLevel();
             LivesSystem.Instance.SpendLife();
             OnLose?.Invoke();
+            AudioManager.Instance.PlayLose();
         }
 
         // ═════════════════════════════════════════════════════════════════
@@ -206,21 +213,23 @@ namespace Game.Feature.Level
 
         public void RetryLevel()
         {
-
             EndLevel();
 
             foreach (Shooter s in _shooters)
+            {
                 s.ResetShooter();
+            }
 
             ShooterManager.Instance.ClearShooters();
-            
+
             if (!LivesSystem.Instance.HasLives)
             {
                 OnNoLives?.Invoke();
                 return;
             }
+
             pixelGrid.ResetLevel();
-            StartLevel(_levels[levelIndex% _levels.Count]);
+            StartLevel(_levels[levelIndex % _levels.Count]);
         }
 
         public void NextLevel()

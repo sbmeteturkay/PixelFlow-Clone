@@ -1,3 +1,4 @@
+using Game.Core;
 using PrimeTween;
 using UnityEngine;
 
@@ -80,6 +81,8 @@ public class PixelCell : MonoBehaviour
             baseScale.y * 1.05f,
             baseScale.z
         );
+
+        AudioManager.Instance.PlayCellDestroyed();
 
         sequence.Stop();
         sequence = Sequence.Create()

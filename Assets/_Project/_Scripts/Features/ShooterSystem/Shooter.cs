@@ -1,4 +1,5 @@
 using System;
+using Game.Core;
 using Game.Feature.Level;
 using PrimeTween;
 using TMPro;
@@ -169,6 +170,7 @@ namespace Game.Feature.Shooting
 
         private void TryLaunchToSpline()
         {
+            AudioManager.Instance.PlayShooterLaunch();
             if (!ShooterManager.Instance.TryEnterSpline(this))
                 return;
 
@@ -207,7 +209,7 @@ namespace Game.Feature.Shooting
             _prevEdge = GridEdge.Corner;
 
             _currentSequence = Sequence.Create()
-                .Group(transform.JumpTo(splineContainer.EvaluatePosition(0), 2, .4f))
+                .Group(transform.JumpTo((Vector3)splineContainer.EvaluatePosition(0) + 0.04f * Vector3.up, 2, .4f))
                 .Group(Tween.Rotation(transform, (Vector3)splineContainer.EvaluateTangent(0) + Vector3.up * 90, .4f,
                         Ease.InBack).OnUpdate(this, (_, _) => pixelCountLabel.transform.LookAt(
                         transform.position + mainCamTransform.forward,
@@ -285,6 +287,7 @@ namespace Game.Feature.Shooting
             if (target == null || !target.IsAlive || target.IsShooted) return;
             if (target.ColorIndex == ColorIndex)
             {
+                AudioManager.Instance.PlayShoot();
                 RegisterHit();
                 Tween.PunchScale(_meshRenderer.gameObject.transform, Vector3.one * .5f, .1f);
                 BulletPool.Instance.Fire(transform.position + transform.TransformDirection(_shootOffset),

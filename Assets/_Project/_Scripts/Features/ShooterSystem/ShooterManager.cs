@@ -83,6 +83,7 @@ namespace Game.Feature.Shooting
             _slotOccupants = new Shooter[slotTransforms.Length];
         }
 
+
         // ═════════════════════════════════════════════════════════════════
         // Spline
         // ═════════════════════════════════════════════════════════════════
