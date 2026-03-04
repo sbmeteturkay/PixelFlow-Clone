@@ -2,7 +2,9 @@
 
 A Unity puzzle game clone built as a portfolio project. Colored shooters orbit a pixel art grid and fire at matching colored cells to reveal the image.
 
-
+> ⚠️ This repository contains only the code.
+> Art assets, levels, and third-party packages are not included.
+> The project will not compile as-is.
 ---
 
 ## Gameplay
@@ -102,3 +104,5 @@ Assets/_Project/
 **ScriptableObject-driven levels.** All level data lives in assets, not scenes. Levels can be created, modified, and batch-generated entirely in the editor without entering play mode.
 
 **Flat architecture over deep abstractions.** For a project of this scope, a flat folder structure with clear singleton managers is more readable and maintainable than layered abstractions.
+
+Assets: Pixel Landscape Library by TOM WOOD — CC BY 4.0
