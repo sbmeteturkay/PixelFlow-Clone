@@ -293,8 +293,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shooter
   _meshRenderer: {fileID: 6107417204616464129}
-  _shootOffset: {x: 0, y: 0.2, z: 1.1}
+  _shootOffset: {x: 0, y: 0.2, z: 0.8}
   pixelCountLabel: {fileID: 4395062005786957909}
+  OnSplineMove:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSplineExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &1853214198299159639
 BoxCollider:
   m_ObjectHideFlags: 0
