@@ -137,6 +137,7 @@ namespace Game.Feature.Shooting
 
                 shooter.OnSplineExit.RemoveAllListeners();
                 targetContainer.tray = tray;
+                OnTrayListCountChanged?.Invoke(_trayContainers.FindAll(x => x.occupied).Count);
             });
 
             OnTrayListCountChanged?.Invoke(_trayContainers.FindAll(x => x.occupied).Count);

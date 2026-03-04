@@ -160,6 +160,7 @@ namespace Game.Feature.Shooting
         private void StopAllProcesses()
         {
             _currentSequence.Stop();
+            Tween.StopAll(gameObject);
         }
 
         // ═════════════════════════════════════════════════════════════════
@@ -203,9 +204,7 @@ namespace Game.Feature.Shooting
             float splineLength = splineContainer.CalculateLength();
             float duration = splineLength / splineMovementSpeed;
 
-            _prevEdge = PixelGrid.Instance.GetEdgeForPosition(
-                splineContainer.EvaluatePosition(0));
-            _prevLineIndex = GetCurrentLineIndex(_prevEdge);
+            _prevEdge = GridEdge.Corner;
 
             _currentSequence = Sequence.Create()
                 .Group(transform.JumpTo(splineContainer.EvaluatePosition(0), 2, .4f))
@@ -250,13 +249,13 @@ namespace Game.Feature.Shooting
             if (PixelGrid.Instance == null) return;
 
             GridEdge currentEdge = PixelGrid.Instance.GetEdgeForPosition(transform.position);
-
-            if (currentEdge == GridEdge.Corner)
+            if (currentEdge == GridEdge.Corner && _prevLineIndex != -1)
             {
                 _prevLineIndex = -1;
                 _prevEdge = GridEdge.Corner;
                 return;
             }
+
 
             if (currentEdge != _prevEdge)
             {
@@ -266,8 +265,10 @@ namespace Game.Feature.Shooting
                 return;
             }
 
+
             int currentLineIndex = GetCurrentLineIndex(currentEdge);
             if (currentLineIndex == _prevLineIndex) return;
+
 
             int step = currentLineIndex > _prevLineIndex ? 1 : -1;
             for (int line = _prevLineIndex + step; line != currentLineIndex + step; line += step)
@@ -287,7 +288,7 @@ namespace Game.Feature.Shooting
                 RegisterHit();
                 Tween.PunchScale(_meshRenderer.gameObject.transform, Vector3.one * .5f, .1f);
                 BulletPool.Instance.Fire(transform.position + transform.TransformDirection(_shootOffset),
-                    transform.forward, target, ColorIndex, 15);
+                    transform.forward, target, ColorIndex, 12);
             }
         }
 
@@ -344,7 +345,8 @@ namespace Game.Feature.Shooting
                 .Group(
                     Tween.Scale(transform, Vector3.zero, .5f, Ease.InBack).OnComplete(() =>
                     {
-                        OnRequestRelease?.Invoke(this);
+                        if (gameObject.activeInHierarchy)
+                            OnRequestRelease?.Invoke(this);
                     })
                 );
         }

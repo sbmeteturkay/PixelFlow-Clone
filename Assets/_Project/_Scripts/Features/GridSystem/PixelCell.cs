@@ -1,8 +1,16 @@
-using UnityEngine;
 using PrimeTween;
+using UnityEngine;
 
 public class PixelCell : MonoBehaviour
 {
+    private static readonly int BaseColorID = Shader.PropertyToID("_BaseColor");
+    [SerializeField] private MeshRenderer _meshRenderer;
+    private Color _baseColor;
+
+    // ── Private ───────────────────────────────────────────────────────
+
+    private Sequence sequence;
+
     // ── Properties ────────────────────────────────────────────────────
     public int Column { get; private set; }
     public int Row { get; private set; }
@@ -10,21 +18,9 @@ public class PixelCell : MonoBehaviour
     public bool IsEmpty => ColorIndex < 0;
     public bool IsAlive { get; private set; }
     public bool IsShooted { get; private set; }
-    [SerializeField]private MeshRenderer _meshRenderer;
-
-    // ── Private ───────────────────────────────────────────────────────
-    private MaterialPropertyBlock _mpb;
-    private Color _baseColor;
-
-    private static readonly int BaseColorID = Shader.PropertyToID("_BaseColor");
-    // Eğer built-in kullanıyorsan yukarıyı "_Color" yap
 
     // ─────────────────────────────────────────────────────────────────
 
-    private void Awake()
-    {
-        _mpb = new MaterialPropertyBlock();
-    }
 
     public void Initialize(int col, int row, int colorIndex, Color color)
     {
@@ -59,6 +55,7 @@ public class PixelCell : MonoBehaviour
 
     public void ResetCell()
     {
+        sequence.Stop();
         IsShooted = false;
         IsAlive = true;
         transform.localScale = Vector3.one;
@@ -72,22 +69,23 @@ public class PixelCell : MonoBehaviour
 
         Vector3 baseScale = transform.localScale;
 
-        Vector3 squashScale = new Vector3(
+        Vector3 squashScale = new(
             baseScale.x * 1.08f,
             baseScale.y * 0.95f,
             baseScale.z
         );
 
-        Vector3 popScale = new Vector3(
+        Vector3 popScale = new(
             baseScale.x * 1.3f,
             baseScale.y * 1.05f,
             baseScale.z
         );
 
-        Sequence.Create()
-            .Chain(Tween.Scale(transform, squashScale, 0.08f, ease: Ease.OutQuad))
-            .Chain(Tween.Scale(transform, popScale, 0.06f, ease: Ease.OutCubic))
-            .Chain(Tween.Scale(transform, Vector3.zero, 0.18f, ease: Ease.InBack))
+        sequence.Stop();
+        sequence = Sequence.Create()
+            .Chain(Tween.Scale(transform, squashScale, 0.08f, Ease.OutQuad))
+            .Chain(Tween.Scale(transform, popScale, 0.06f, Ease.OutCubic))
+            .Chain(Tween.Scale(transform, Vector3.zero, 0.18f, Ease.InBack))
             .OnComplete(() => gameObject.SetActive(false));
     }
 

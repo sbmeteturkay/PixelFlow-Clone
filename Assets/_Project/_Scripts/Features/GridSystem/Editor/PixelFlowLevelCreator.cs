@@ -1,30 +1,24 @@
 #if UNITY_EDITOR
 using System;
-using UnityEngine;
-using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
+using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 public class PixelFlowLevelCreator : EditorWindow
 {
+    private readonly List<Texture2D> _textures = new();
+    private float _colorTolerance = 0.25f;
+    private string _levelDataSavePath = "Assets/_Project/Level/LevelData";
+    private int _maxHeight = 30;
+
+    private int _maxWidth = 40;
+
     // ── Settings ──────────────────────────────────────────────────────
     private string _pixelArtSavePath = "Assets/_Project/Level/PixelArtData";
-    private string _levelDataSavePath = "Assets/_Project/Level/LevelData";
-
-    private float _colorTolerance = 0.25f;
-
-    private List<Texture2D> _textures = new();
     private Vector2 _scroll;
-
-    // ── Menu ──────────────────────────────────────────────────────────
-
-    [MenuItem("Tools/PixelFlow/Level Creator")]
-    public static void Open()
-    {
-        GetWindow<PixelFlowLevelCreator>("PixelFlow Level Creator");
-    }
 
     // ── GUI ───────────────────────────────────────────────────────────
 
@@ -36,31 +30,38 @@ public class PixelFlowLevelCreator : EditorWindow
         EditorGUILayout.LabelField("Save Paths", EditorStyles.boldLabel);
         _pixelArtSavePath = EditorGUILayout.TextField("Pixel Art Path", _pixelArtSavePath);
         _levelDataSavePath = EditorGUILayout.TextField("Level Data Path", _levelDataSavePath);
+
         if (GUILayout.Button("Clear"))
         {
             AssetDatabase.DeleteAsset(_pixelArtSavePath);
             AssetDatabase.DeleteAsset(_levelDataSavePath);
         }
 
+        if (GUILayout.Button("Create Levels", GUILayout.Height(36)))
+            CreateLevels();
+
         EditorGUILayout.Space(8);
         EditorGUILayout.LabelField("Generation Settings", EditorStyles.boldLabel);
-        _colorTolerance        = EditorGUILayout.Slider("Color Tolerance", _colorTolerance, 0f, 1f);
+        _colorTolerance = EditorGUILayout.Slider("Color Tolerance", _colorTolerance, 0f, 1f);
+
+        EditorGUILayout.Space(4);
+        EditorGUILayout.LabelField("Max Texture Size", EditorStyles.boldLabel);
+        _maxWidth = EditorGUILayout.IntField("Max Width", _maxWidth);
+        _maxHeight = EditorGUILayout.IntField("Max Height", _maxHeight);
+        EditorGUILayout.HelpBox($"Textures larger than {_maxWidth}x{_maxHeight} will be downscaled.", MessageType.Info);
 
         EditorGUILayout.Space(8);
         EditorGUILayout.LabelField("Textures", EditorStyles.boldLabel);
 
-        // Drag & drop area
         Rect dropArea = GUILayoutUtility.GetRect(0, 50, GUILayout.ExpandWidth(true));
         GUI.Box(dropArea, "Drag & Drop Textures Here");
         HandleDrop(dropArea);
 
-        // Add selected button
         if (GUILayout.Button("Add Selected Textures"))
             AddSelectedTextures();
 
         EditorGUILayout.Space(4);
 
-        // Texture list
         for (int i = _textures.Count - 1; i >= 0; i--)
         {
             EditorGUILayout.BeginHorizontal();
@@ -78,12 +79,17 @@ public class PixelFlowLevelCreator : EditorWindow
 
         EditorGUILayout.Space(4);
 
-        if (GUILayout.Button("Create Levels", GUILayout.Height(36)))
-            CreateLevels();
 
         GUI.enabled = true;
-
         EditorGUILayout.EndScrollView();
+    }
+
+    // ── Menu ──────────────────────────────────────────────────────────
+
+    [MenuItem("Tools/PixelFlow/Level Creator")]
+    public static void Open()
+    {
+        GetWindow<PixelFlowLevelCreator>("PixelFlow Level Creator");
     }
 
     // ── Drag & Drop ───────────────────────────────────────────────────
@@ -106,6 +112,7 @@ public class PixelFlowLevelCreator : EditorWindow
                 if (obj is Texture2D tex && !_textures.Contains(tex))
                     _textures.Add(tex);
             }
+
             e.Use();
         }
     }
@@ -140,9 +147,9 @@ public class PixelFlowLevelCreator : EditorWindow
             string artPath = $"{_pixelArtSavePath}/{tex.name}_Data.asset";
             AssetDatabase.CreateAsset(pixelArt, artPath);
 
-            LevelData level = ScriptableObject.CreateInstance<LevelData>();
-            level.pixelArt          = pixelArt;
-            level.colorTolerance    = _colorTolerance;
+            LevelData level = CreateInstance<LevelData>();
+            level.pixelArt = pixelArt;
+            level.colorTolerance = _colorTolerance;
 
             GenerateShooters(level);
 
@@ -154,7 +161,6 @@ public class PixelFlowLevelCreator : EditorWindow
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
-
         Debug.Log($"[PixelFlow] {created} level(s) created.");
     }
 
@@ -167,19 +173,24 @@ public class PixelFlowLevelCreator : EditorWindow
         string path = AssetDatabase.GetAssetPath(texture);
         TextureImporter importer = (TextureImporter)AssetImporter.GetAtPath(path);
 
-        importer.textureType        = TextureImporterType.Default;
-        importer.isReadable         = true;
-        importer.filterMode         = FilterMode.Point;
+        importer.textureType = TextureImporterType.Default;
+        importer.isReadable = true;
+        importer.filterMode = FilterMode.Point;
         importer.textureCompression = TextureImporterCompression.Uncompressed;
         importer.SaveAndReimport();
 
-        Color[] pixels = texture.GetPixels();
-        int width  = texture.width;
-        int height = texture.height;
+        // Downscale if needed
+        Texture2D source = texture.width > _maxWidth || texture.height > _maxHeight
+            ? ResizeTexture(texture, _maxWidth, _maxHeight)
+            : texture;
 
-        PixelArtData data = ScriptableObject.CreateInstance<PixelArtData>();
+        Color[] pixels = source.GetPixels();
+        int width = source.width;
+        int height = source.height;
+
+        PixelArtData data = CreateInstance<PixelArtData>();
         data.columns = width;
-        data.rows    = height;
+        data.rows = height;
 
         Dictionary<Color, int> colorToIndex = new();
         data.palette.Clear();
@@ -199,10 +210,10 @@ public class PixelFlowLevelCreator : EditorWindow
 
                 if (!colorToIndex.ContainsKey(c))
                 {
-                    data.palette.Add(new ColorEntry
+                    data.palette.Add(new()
                     {
                         colorName = "Color " + data.palette.Count,
-                        color     = c
+                        color = c
                     });
                     colorToIndex[c] = data.palette.Count - 1;
                 }
@@ -215,16 +226,37 @@ public class PixelFlowLevelCreator : EditorWindow
         return data;
     }
 
+    private Texture2D ResizeTexture(Texture2D source, int maxWidth, int maxHeight)
+    {
+        float ratio = Mathf.Min((float)maxWidth / source.width, (float)maxHeight / source.height);
+        int newWidth = Mathf.Max(1, Mathf.RoundToInt(source.width * ratio));
+        int newHeight = Mathf.Max(1, Mathf.RoundToInt(source.height * ratio));
+
+        RenderTexture rt = RenderTexture.GetTemporary(newWidth, newHeight, 0, RenderTextureFormat.ARGB32);
+        rt.filterMode = FilterMode.Point;
+        Graphics.Blit(source, rt);
+
+        RenderTexture.active = rt;
+        Texture2D result = new(newWidth, newHeight, TextureFormat.RGBA32, false);
+        result.ReadPixels(new(0, 0, newWidth, newHeight), 0, 0);
+        result.Apply();
+
+        RenderTexture.active = null;
+        RenderTexture.ReleaseTemporary(rt);
+        return result;
+    }
+
     // ═════════════════════════════════════════════════════════════════
     // Shooter Generation
     // ═════════════════════════════════════════════════════════════════
 
     private void GenerateShooters(LevelData level)
     {
-        level.shooters = new List<ShooterData>();
+        level.shooters = new();
 
         PixelArtData art = level.pixelArt;
-        var (indexToCluster, clusterColors) = LevelCreationExtensions.BuildColorClusters(art, level.colorTolerance);
+        (Dictionary<int, int> indexToCluster, List<Color> clusterColors) =
+            LevelCreationExtensions.BuildColorClusters(art, level.colorTolerance);
 
         Dictionary<int, int> clusterPixelCounts = new();
 
@@ -238,36 +270,35 @@ public class PixelFlowLevelCreator : EditorWindow
                 int cluster = indexToCluster[idx];
                 if (!clusterPixelCounts.ContainsKey(cluster))
                     clusterPixelCounts[cluster] = 0;
-
                 clusterPixelCounts[cluster]++;
             }
         }
 
-        foreach (var kv in clusterPixelCounts)
+        foreach (KeyValuePair<int, int> kv in clusterPixelCounts)
         {
-            int clusterId   = kv.Key;
+            int clusterId = kv.Key;
             int totalPixels = kv.Value;
 
-            List<int> portions = SplitIntoParts(
-                totalPixels
-            );
+            List<int> portions = SplitIntoParts(totalPixels);
 
             foreach (int portion in portions)
             {
-                level.shooters.Add(new ShooterData
+                level.shooters.Add(new()
                 {
-                    colorIndex  = clusterId,
-                    pixelCount  = portion,
+                    colorIndex = clusterId,
+                    pixelCount = portion,
                     targetColor = clusterColors[clusterId]
                 });
             }
         }
-        level.shooters= level.shooters.OrderBy(i => Guid.NewGuid()).ToList();
+
+        //shuffle
+        level.shooters = level.shooters.OrderBy(i => Guid.NewGuid()).ToList();
     }
 
     private List<int> SplitIntoParts(int total)
     {
-        if (total <= 0) return new List<int>();
+        if (total <= 0) return new();
 
         int[] allowedSizes = { 10, 20, 30, 40 };
         List<int> parts = new();
@@ -283,7 +314,6 @@ public class PixelFlowLevelCreator : EditorWindow
                 break;
             }
 
-            // Rastgele bir index seç — tüm değerler eşit şansa sahip
             int take = possible[Random.Range(0, possible.Length)];
             parts.Add(take);
             remaining -= take;
@@ -292,22 +322,20 @@ public class PixelFlowLevelCreator : EditorWindow
         return parts;
     }
 
-
     // ── Helpers ───────────────────────────────────────────────────────
 
     private void EnsureDirectory(string path)
     {
-        if (!AssetDatabase.IsValidFolder(path))
+        if (AssetDatabase.IsValidFolder(path)) return;
+
+        string[] parts = path.Split('/');
+        string current = parts[0];
+        for (int i = 1; i < parts.Length; i++)
         {
-            string[] parts = path.Split('/');
-            string current = parts[0];
-            for (int i = 1; i < parts.Length; i++)
-            {
-                string next = current + "/" + parts[i];
-                if (!AssetDatabase.IsValidFolder(next))
-                    AssetDatabase.CreateFolder(current, parts[i]);
-                current = next;
-            }
+            string next = current + "/" + parts[i];
+            if (!AssetDatabase.IsValidFolder(next))
+                AssetDatabase.CreateFolder(current, parts[i]);
+            current = next;
         }
     }
 }
