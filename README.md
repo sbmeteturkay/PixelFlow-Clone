@@ -2,6 +2,8 @@
 
 A Unity puzzle game clone built as a portfolio project. Colored shooters orbit a pixel art grid and fire at matching colored cells to reveal the image.
 
+https://github.com/user-attachments/assets/aa0ba6c5-7388-4db1-8962-d090d69c62e3
+
 > ⚠️ This repository contains only the code.
 > Art assets, levels, and third-party packages are not included.
 > The project will not compile as-is.
